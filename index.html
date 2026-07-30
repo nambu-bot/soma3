@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>相馬牧場 売上・出荷管理</title>
+<style>
+  :root{
+    --ink:#1a2e35; --bg:#f6f4ee; --card:#fff; --line:#e2ddd0;
+    --accent:#3d7068; --soft:#e8f0ec; --gold:#c08a2d; --sub:#7c8a86; --danger:#a8432f;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;background:var(--bg);color:var(--ink);}
+  .wrap{max-width:720px;margin:0 auto;min-height:100vh;}
+  header{padding:20px 16px 14px;border-bottom:2px solid var(--accent);background:var(--card);}
+  .brand{font-size:12px;letter-spacing:3px;color:var(--accent);font-weight:700;}
+  .title{font-size:20px;font-weight:800;margin-top:2px;}
+  .badge{display:inline-block;font-size:11px;font-weight:700;border-radius:20px;padding:2px 10px;margin-top:6px;}
+  nav{display:flex;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;}
+  nav button{flex:1;padding:13px 4px;border:none;background:none;cursor:pointer;font-size:14px;color:var(--sub);border-bottom:3px solid transparent;}
+  nav button.on{font-weight:800;color:var(--accent);border-bottom:3px solid var(--accent);}
+  main{padding:18px 16px 60px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px;}
+  .card h3{font-size:14px;font-weight:800;margin:0 0 12px;}
+  label{display:block;font-size:12px;color:var(--sub);margin-bottom:4px;font-weight:600;}
+  input,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:16px;background:#fcfbf8;}
+  .row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+  .btn{width:100%;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:800;cursor:pointer;}
+  .seg{display:flex;gap:6px;margin-bottom:12px;}
+  .seg button{flex:1;padding:9px 0;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-weight:700;cursor:pointer;}
+  .seg button.on{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .cust{font-size:13px;font-weight:700;color:var(--accent);margin:0 0 6px;}
+  .money{width:90px;text-align:right;font-size:13px;color:var(--sub);}
+  .tot{border-top:1px solid var(--line);padding-top:10px;display:flex;justify-content:space-between;font-weight:800;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th{padding:6px 4px;font-size:12px;font-weight:600;color:var(--sub);text-align:left;}
+  td{padding:8px 4px;border-top:1px solid var(--line);}
+  .stats{display:flex;gap:12px;margin-bottom:14px;}
+  .stat{flex:1;border:1px solid var(--line);border-radius:12px;padding:12px 10px;background:var(--card);}
+  .stat.accent{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .stat .k{font-size:11px;opacity:.8;} .stat .v{font-size:17px;font-weight:800;margin-top:3px;}
+  .del{border:none;background:none;color:var(--danger);cursor:pointer;font-size:18px;}
+  .doc{border:1px solid var(--line);border-radius:10px;padding:18px;}
+  .note{font-size:12px;color:var(--sub);margin-top:8px;}
+  .right{text-align:right;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">SOMA FARM</div>
+    <div class="title">相馬牧場　売上・出荷管理</div>
+    <span id="badge" class="badge"></span>
+  </header>
+  <nav id="nav"></nav>
+  <main id="main"></main>
+</div>
+
+<script>
+// ============ データ層 ============
+// 保存先：接続URL(GAS)があればスプレッドシート、なければこの端末(localStorage)。
+const LS = {
+  get(k, f){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):f; }catch(e){ return f; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+const SEED = [
+  {id:'p1',customer:'onomichi U2',item:'牛乳',price:270},
+  {id:'p2',customer:'onomichi U2',item:'ヨーグルト',price:450},
+  {id:'p3',customer:'せとうちクルーズ',item:'牛乳',price:270},
+  {id:'p4',customer:'TLB（Log）',item:'牛乳',price:270},
+  {id:'p5',customer:'神石高原ティアガルテン',item:'ソフトクリームミックス',price:1200},
+];
+const api = {
+  async load(url){ const r=await fetch(url+(url.includes('?')?'&':'?')+'action=load'); return r.json(); },
+  async saveRecord(url,record){ await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'saveRecord',record})}); },
+  async saveProducts(url,products){ await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'saveProducts',products})}); },
+};
+
+// ============ 状態 ============
+const state = {
+  tab:'input', period:'day', anchor:today(),
+  gasUrl:'', mode:'loading', products:[], records:[], busy:false,
+};
+function today(){ return new Date().toISOString().slice(0,10); }
+function yen(n){ return '¥'+Math.round(n||0).toLocaleString('ja-JP'); }
+function uid(){ return Math.random().toString(36).slice(2,9); }
+function groupBy(ps){ const g={}; ps.forEach(p=>{(g[p.customer]=g[p.customer]||[]).push(p);}); return g; }
+
+async function boot(){
+  state.gasUrl = 'https://script.google.com/macros/s/AKfycbyr7svzKdsCLHRDq5fkH6a9ZUql0a1BG5nDxsrjfeuIgoE12BWhoOI4LGahpgWxFxRQTA/exec';
+  if(state.gasUrl){
+    try{
+      const d = await api.load(state.gasUrl);
+      if(d && d.ok){ state.products=d.products&&d.products.length?d.products:SEED; state.records=d.records||[]; state.mode='live'; render(); return; }
+      state.mode='error';
+    }catch(e){ state.mode='error'; }
+  }
+  state.products = LS.get('products',null) || SEED;
+  state.records  = LS.get('records',[]) || [];
+  if(state.mode!=='error') state.mode='local';
+  render();
+}
+async function saveRecord(rec){
+  state.records = state.records.filter(r=>r.date!==rec.date).concat([rec]).sort((a,b)=>a.date.localeCompare(b.date));
+  if(state.mode==='live'){ state.busy=true; render(); try{ await api.saveRecord(state.gasUrl,rec); }catch(e){} state.busy=false; }
+  else LS.set('records',state.records);
+  render();
+}
+async function saveProducts(list){
+  state.products = list;
+  if(state.mode==='live'){ state.busy=true; render(); try{ await api.saveProducts(state.gasUrl,list); }catch(e){} state.busy=false; }
+  else LS.set('products',state.products);
+  render();
+}
+async function connect(url){ LS.set('config:gasUrl',(url||'').trim()); state.mode='loading'; render(); boot(); }
+
+// ============ 画面 ============
+function render(){
+  const badge = document.getElementById('badge');
+  const m = {live:['スプレッドシート接続中','var(--accent)'],local:['ローカルモード（未接続）','var(--gold)'],error:['接続エラー（設定を確認）','var(--danger)'],loading:['…','var(--sub)']}[state.mode];
+  badge.textContent = m[0] + (state.busy?'　保存中…':''); badge.style.color=m[1]; badge.style.border='1px solid '+m[1];
+
+  const nav = document.getElementById('nav');
+  const tabs = [['input','入力'],['report','集計'],['docs','帳票'],['settings','設定']];
+  nav.innerHTML = tabs.map(([k,l])=>`<button class="${state.tab===k?'on':''}" data-tab="${k}">${l}</button>`).join('');
+  nav.querySelectorAll('button').forEach(b=>b.onclick=()=>{state.tab=b.dataset.tab;render();});
+
+  const main = document.getElementById('main');
+  if(state.mode==='loading'){ main.innerHTML='<div style="padding:40px;color:var(--sub)">読み込み中…</div>'; return; }
+  if(state.tab==='input') renderInput(main);
+  if(state.tab==='report') renderReport(main);
+  if(state.tab==='docs') renderDocs(main);
+  if(state.tab==='settings') renderSettings(main);
+}
+
+function renderInput(main){
+  const date = state._inputDate || today();
+  const e = state.records.find(r=>r.date===date) || {};
+  const sales = state._sales || e.sales || {};
+  let html = `<div class="card"><h3>日付</h3><input type="date" id="d" value="${date}">${e.date?'<div style="font-size:12px;color:var(--accent);margin-top:6px">この日の記録を編集しています</div>':''}</div>`;
+  html += `<div class="card"><h3>毎日の乳量</h3><div class="row"><input type="number" id="milk" value="${e.milk??''}" placeholder="0"><span style="color:var(--sub)">L</span></div></div>`;
+  html += `<div class="card"><h3>広酪への出荷量</h3><div class="row"><input type="number" id="ship" value="${e.shipGyoraku??''}" placeholder="0"><span style="color:var(--sub)">L</span></div></div>`;
+  html += `<div class="card"><h3>販売数（販売先・商品別）</h3>`;
+  const g = groupBy(state.products);
+  for(const cust in g){
+    html += `<p class="cust">${cust}</p>`;
+    g[cust].forEach(p=>{
+      const q = sales[p.id]??'';
+      html += `<div class="row"><div style="flex:1;font-size:14px">${p.item}<span style="color:var(--sub);font-size:12px">　${yen(p.price)}/点</span></div>
+        <input type="number" class="q" data-id="${p.id}" value="${q}" placeholder="0" style="width:90px;flex:none;text-align:right">
+        <div class="money" data-money="${p.id}">${yen((Number(q)||0)*p.price)}</div></div>`;
+    });
+  }
+  const tot = state.products.reduce((s,p)=>s+(Number(sales[p.id])||0)*p.price,0);
+  html += `<div class="tot"><span>この日の売上合計</span><span id="daytot" style="color:var(--accent)">${yen(tot)}</span></div></div>`;
+  html += `<button class="btn" id="save">この日の記録を保存</button>`;
+  main.innerHTML = html;
+
+  document.getElementById('d').onchange = ev=>{ state._inputDate=ev.target.value; state._sales=null; render(); };
+  main.querySelectorAll('.q').forEach(inp=>{
+    inp.oninput = ()=>{
+      const id=inp.dataset.id; const s={...(state._sales||e.sales||{})}; s[id]=inp.value; state._sales=s;
+      const p=state.products.find(x=>x.id===id);
+      main.querySelector(`[data-money="${id}"]`).textContent = yen((Number(inp.value)||0)*p.price);
+      const t=state.products.reduce((sum,pp)=>sum+(Number(s[pp.id])||0)*pp.price,0);
+      document.getElementById('daytot').textContent = yen(t);
+    };
+  });
+  document.getElementById('save').onclick = ()=>{
+    const s = state._sales || e.sales || {};
+    saveRecord({date, milk:Number(document.getElementById('milk').value)||0, shipGyoraku:Number(document.getElementById('ship').value)||0, sales:s});
+    state._sales=null; alert('保存しました');
+  };
+}
+
+function renderReport(main){
+  const {period,anchor} = state;
+  const filt = state.records.filter(r=> period==='day'?r.date===anchor : period==='month'?r.date.slice(0,7)===anchor.slice(0,7) : r.date.slice(0,4)===anchor.slice(0,4));
+  const milk = filt.reduce((s,r)=>s+(r.milk||0),0);
+  const ship = filt.reduce((s,r)=>s+(r.shipGyoraku||0),0);
+  const map={};
+  filt.forEach(r=>state.products.forEach(p=>{const q=Number(r.sales?.[p.id])||0;if(!q)return;if(!map[p.id])map[p.id]={customer:p.customer,item:p.item,price:p.price,qty:0};map[p.id].qty+=q;}));
+  const rows = Object.values(map).map(x=>({...x,total:x.qty*x.price})).sort((a,b)=>b.total-a.total);
+  const grand = rows.reduce((s,x)=>s+x.total,0);
+  const inputType = period==='day'?'date':period==='month'?'month':'number';
+  const inputVal = period==='year'?anchor.slice(0,4):period==='month'?anchor.slice(0,7):anchor;
+
+  let html = `<div class="card"><div class="seg">
+    ${[['day','日別'],['month','月別'],['year','年別']].map(([k,l])=>`<button class="${period===k?'on':''}" data-p="${k}">${l}</button>`).join('')}
+    </div><input type="${inputType}" id="anchor" value="${inputVal}"></div>`;
+  html += `<div class="stats">
+    <div class="stat"><div class="k">乳量</div><div class="v">${milk.toLocaleString()} L</div></div>
+    <div class="stat"><div class="k">広酪出荷</div><div class="v">${ship.toLocaleString()} L</div></div>
+    <div class="stat accent"><div class="k">売上合計</div><div class="v">${yen(grand)}</div></div></div>`;
+  html += `<div class="card"><h3>販売先・商品別の売上</h3>`;
+  if(!rows.length) html += `<div style="color:var(--sub);font-size:14px;padding:10px 0">この期間の販売記録はまだありません。</div>`;
+  else{
+    html += `<table><thead><tr><th>販売先</th><th>商品</th><th class="right">数量</th><th class="right">単価</th><th class="right">合計</th></tr></thead><tbody>`;
+    rows.forEach(r=> html+=`<tr><td>${r.customer}</td><td>${r.item}</td><td class="right">${r.qty}</td><td class="right">${yen(r.price)}</td><td class="right" style="font-weight:700">${yen(r.total)}</td></tr>`);
+    html += `</tbody><tfoot><tr style="border-top:2px solid var(--accent)"><td colspan="4" style="font-weight:800;padding:8px 4px">全体合計売上</td><td class="right" style="font-weight:800;color:var(--accent);padding:8px 4px">${yen(grand)}</td></tr></tfoot></table>`;
+  }
+  html += `</div>`;
+  main.innerHTML = html;
+  main.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{state.period=b.dataset.p;render();});
+  document.getElementById('anchor').onchange = ev=>{ const v=ev.target.value; state.anchor = state.period==='year'?v+'-01-01':state.period==='month'?v+'-01':v; render(); };
+}
+
+function renderDocs(main){
+  const customers=[...new Set(state.products.map(p=>p.customer))];
+  const cust = state._docCust || customers[0] || '';
+  const month = state._docMonth || today().slice(0,7);
+  const kind = state._docKind || '請求書';
+  const recs = state.records.filter(r=>r.date.slice(0,7)===month);
+  const map={};
+  recs.forEach(r=>state.products.filter(p=>p.customer===cust).forEach(p=>{const q=Number(r.sales?.[p.id])||0;if(!q)return;if(!map[p.id])map[p.id]={item:p.item,price:p.price,qty:0};map[p.id].qty+=q;}));
+  const lines = Object.values(map).map(x=>({...x,total:x.qty*x.price}));
+  const total = lines.reduce((s,x)=>s+x.total,0); const tax=Math.floor(total*0.08);
+
+  let html = `<div class="card"><h3>帳票を作成</h3>
+    <label>種類</label><div class="seg">${['納品書','請求書','入金確認'].map(k=>`<button class="${kind===k?'on':''}" data-k="${k}">${k}</button>`).join('')}</div>
+    <label>販売先</label><select id="dc" style="margin-bottom:12px">${customers.map(c=>`<option ${c===cust?'selected':''}>${c}</option>`).join('')}</select>
+    <label>対象月</label><input type="month" id="dm" value="${month}"></div>`;
+  html += `<div class="card"><div class="doc">
+    <div style="text-align:center;font-size:18px;font-weight:800;letter-spacing:4px">${kind}</div>
+    <div style="text-align:center;font-size:11px;color:var(--sub);margin-bottom:16px">${month} 分</div>
+    <div style="font-size:14px;font-weight:700">${cust}　御中</div>
+    <div class="right" style="font-size:11px;color:var(--sub);margin-bottom:12px">株式会社相馬牧場<br>広島県神石郡神石高原町油木乙6673番地<br>登録番号：T〔　　　　　　　〕</div>`;
+  if(kind==='入金確認') html += `<div style="padding:16px 0;font-size:14px">請求額 <b>${yen(total+tax)}</b> に対する入金の消込状況を管理する画面です。<br><span style="color:var(--sub);font-size:12px">本番では「入金済み／未入金」をここで記録します。</span></div>`;
+  else if(!lines.length) html += `<div style="color:var(--sub);font-size:13px;padding:12px 0">この月・この販売先の記録がありません。</div>`;
+  else{
+    html += `<table><thead><tr><th>商品</th><th class="right">数量</th><th class="right">単価</th><th class="right">金額</th></tr></thead><tbody>`;
+    lines.forEach(l=> html+=`<tr><td>${l.item}</td><td class="right">${l.qty}</td><td class="right">${yen(l.price)}</td><td class="right">${yen(l.total)}</td></tr>`);
+    html += `</tbody></table><div class="right" style="margin-top:12px;font-size:13px"><div>小計　${yen(total)}</div>${kind==='請求書'?`<div style="color:var(--sub)">消費税(8%)　${yen(tax)}</div>`:''}<div style="font-size:16px;font-weight:800;margin-top:4px;color:var(--accent)">${kind==='請求書'?'ご請求額':'合計'}　${yen(kind==='請求書'?total+tax:total)}</div></div>`;
+  }
+  html += `</div><div class="note">※ 印刷は、ブラウザの「印刷 → PDFに保存」で出力できます。</div></div>`;
+  main.innerHTML = html;
+  main.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{state._docKind=b.dataset.k;render();});
+  document.getElementById('dc').onchange = ev=>{state._docCust=ev.target.value;render();};
+  document.getElementById('dm').onchange = ev=>{state._docMonth=ev.target.value;render();};
+}
+
+function renderSettings(main){
+  const g = groupBy(state.products);
+  let html = `<div class="card"><h3>接続設定（Googleスプレッドシート）</h3>
+    <div class="note" style="margin-top:0;margin-bottom:10px">GASで公開した /exec のURLを貼って「接続する」を押すと、携帯とPCで同じデータを共有できます。空のままだと、この端末内だけの試用になります。</div>
+    <input id="gas" value="${state.gasUrl||''}" placeholder="https://script.google.com/macros/s/××××/exec" style="margin-bottom:10px;font-size:13px">
+    <button class="btn" id="conn">接続する</button>`;
+  if(state.mode==='error') html += `<div style="color:var(--danger);font-size:12px;margin-top:8px">接続できませんでした。URLと、GASの公開設定（アクセス：全員）をご確認ください。</div>`;
+  if(state.mode==='live') html += `<div style="color:var(--accent);font-size:12px;margin-top:8px">接続済みです。入力はスプレッドシートに保存されます。</div>`;
+  html += `</div>`;
+
+  html += `<div class="card"><h3>販売先・商品ごとの単価</h3><div class="note" style="margin-top:0;margin-bottom:12px">ここで登録した単価で金額を自動計算します。牛乳は270円/本で登録済みです。</div>`;
+  for(const cust in g){
+    html += `<p class="cust">${cust}</p>`;
+    g[cust].forEach(p=>{
+      html += `<div class="row"><div style="flex:1;font-size:14px">${p.item}</div>
+        <input type="number" class="price" data-id="${p.id}" value="${p.price}" style="width:100px;flex:none;text-align:right">
+        <span style="font-size:12px;color:var(--sub)">円</span>
+        <button class="del" data-del="${p.id}">×</button></div>`;
+    });
+  }
+  html += `</div>`;
+
+  html += `<div class="card"><h3>新しい商品を追加</h3>
+    <label>販売先</label><input id="nc" placeholder="例：onomichi U2" style="margin-bottom:8px">
+    <label>商品名</label><input id="ni" placeholder="例：牛乳" style="margin-bottom:8px">
+    <label>単価（円／点）</label><input id="np" type="number" placeholder="例：270" style="margin-bottom:12px">
+    <button class="btn" id="add">追加する</button></div>`;
+  main.innerHTML = html;
+
+  document.getElementById('conn').onclick = ()=> connect(document.getElementById('gas').value);
+  main.querySelectorAll('.price').forEach(inp=> inp.onblur=()=>{ const list=state.products.map(p=>p.id===inp.dataset.id?{...p,price:Number(inp.value)||0}:p); saveProducts(list); });
+  main.querySelectorAll('[data-del]').forEach(b=> b.onclick=()=> saveProducts(state.products.filter(p=>p.id!==b.dataset.del)) );
+  document.getElementById('add').onclick = ()=>{
+    const c=document.getElementById('nc').value, i=document.getElementById('ni').value, pr=document.getElementById('np').value;
+    if(!c||!i||!pr) return;
+    saveProducts([...state.products,{id:uid(),customer:c.trim(),item:i.trim(),price:Number(pr)||0}]);
+  };
+}
+
+boot();
+</script>
+</body>
+</html>
