@@ -11,11 +11,22 @@
   }
   *{box-sizing:border-box;}
   body{margin:0;font-family:'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;background:var(--bg);color:var(--ink);}
-  .wrap{max-width:720px;margin:0 auto;min-height:100vh;}
-  header{padding:20px 16px 14px;border-bottom:2px solid var(--accent);background:var(--card);}
-  .brand{font-size:12px;letter-spacing:3px;color:var(--accent);font-weight:700;}
-  .title{font-size:20px;font-weight:800;margin-top:2px;}
+  .wrap{max-width:760px;margin:0 auto;min-height:100vh;}
+
+  /* ── ログイン ── */
+  #login{max-width:380px;margin:0 auto;padding:60px 20px;}
+  #login .box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px;}
+  #login .brand{font-size:11px;letter-spacing:3px;color:var(--accent);font-weight:700;}
+  #login h1{font-size:19px;margin:4px 0 22px;}
+  #login .err{color:var(--danger);font-size:13px;margin-top:10px;display:none;}
+
+  header{padding:18px 16px 12px;border-bottom:2px solid var(--accent);background:var(--card);position:relative;}
+  .brand{font-size:11px;letter-spacing:3px;color:var(--accent);font-weight:700;}
+  .title{font-size:19px;font-weight:800;margin-top:2px;}
   .badge{display:inline-block;font-size:11px;font-weight:700;border-radius:20px;padding:2px 10px;margin-top:6px;}
+  .who{position:absolute;top:18px;right:16px;font-size:11px;color:var(--sub);text-align:right;}
+  .who button{margin-top:4px;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:3px 9px;font-size:11px;cursor:pointer;color:var(--sub);}
+
   nav{display:flex;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;}
   nav button{flex:1;padding:13px 4px;border:none;background:none;cursor:pointer;font-size:14px;color:var(--sub);border-bottom:3px solid transparent;}
   nav button.on{font-weight:800;color:var(--accent);border-bottom:3px solid var(--accent);}
@@ -26,11 +37,12 @@
   input,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:16px;background:#fcfbf8;}
   .row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
   .btn{width:100%;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:800;cursor:pointer;}
+  .btn.sub{background:var(--card);color:var(--accent);border:1px solid var(--accent);}
   .seg{display:flex;gap:6px;margin-bottom:12px;}
   .seg button{flex:1;padding:9px 0;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-weight:700;cursor:pointer;}
   .seg button.on{background:var(--accent);color:#fff;border-color:var(--accent);}
   .cust{font-size:13px;font-weight:700;color:var(--accent);margin:0 0 6px;}
-  .money{width:90px;text-align:right;font-size:13px;color:var(--sub);}
+  .money{width:92px;text-align:right;font-size:13px;color:var(--sub);}
   .tot{border-top:1px solid var(--line);padding-top:10px;display:flex;justify-content:space-between;font-weight:800;}
   table{width:100%;border-collapse:collapse;font-size:13px;}
   th{padding:6px 4px;font-size:12px;font-weight:600;color:var(--sub);text-align:left;}
@@ -40,245 +52,450 @@
   .stat.accent{background:var(--accent);color:#fff;border-color:var(--accent);}
   .stat .k{font-size:11px;opacity:.8;} .stat .v{font-size:17px;font-weight:800;margin-top:3px;}
   .del{border:none;background:none;color:var(--danger);cursor:pointer;font-size:18px;}
-  .doc{border:1px solid var(--line);border-radius:10px;padding:18px;}
   .note{font-size:12px;color:var(--sub);margin-top:8px;}
-  .right{text-align:right;}
+  .right{text-align:right;} .center{text-align:center;}
+
+  /* ── 帳票（納品書・請求書） ── */
+  .sheet{background:#fff;border:1px solid var(--line);border-radius:6px;padding:30px 28px;font-family:'Yu Mincho','Hiragino Mincho ProN',serif;color:#111;}
+  .sheet .dtitle{text-align:center;font-size:25px;font-weight:700;letter-spacing:10px;margin:0 0 4px;}
+  .sheet .drule{width:120px;height:2px;background:#111;margin:0 auto 22px;}
+  .sheet .meta{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px;gap:20px;}
+  .sheet .to{flex:1;}
+  .sheet .to .nm{font-size:17px;font-weight:700;border-bottom:1px solid #111;padding-bottom:5px;display:inline-block;min-width:230px;}
+  .sheet .to .sub{font-size:11px;color:#555;margin-top:8px;line-height:1.7;}
+  .sheet .from{font-size:11px;line-height:1.8;text-align:left;min-width:230px;position:relative;}
+  .sheet .from .co{font-size:14px;font-weight:700;}
+  .sheet .seal{position:absolute;right:0;bottom:0;width:42px;height:42px;border:1px solid #c33;border-radius:3px;color:#c33;font-size:9px;display:flex;align-items:center;justify-content:center;opacity:.6;}
+  .sheet .lead{font-size:12px;margin:0 0 14px;}
+  .sheet .grand{border:2px solid #111;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+  .sheet .grand .lbl{font-size:13px;font-weight:700;letter-spacing:2px;}
+  .sheet .grand .amt{font-size:23px;font-weight:700;}
+  .sheet table.items{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:14px;}
+  .sheet table.items th{background:#f0efe9;border:1px solid #999;padding:7px 6px;font-weight:700;color:#111;text-align:center;font-size:11px;}
+  .sheet table.items td{border:1px solid #bbb;padding:7px 6px;}
+  .sheet table.items td.n{text-align:right;} .sheet table.items td.c{text-align:center;}
+  .sheet table.items tr.blank td{height:26px;}
+  .sheet .sumbox{margin-left:auto;width:270px;font-size:12px;}
+  .sheet .sumbox div{display:flex;justify-content:space-between;padding:5px 8px;border-bottom:1px solid #ddd;}
+  .sheet .sumbox div.fin{border-top:2px solid #111;border-bottom:none;font-size:15px;font-weight:700;padding-top:8px;}
+  .sheet .bank{margin-top:18px;border:1px solid #999;padding:11px 13px;font-size:11px;line-height:1.9;}
+  .sheet .bank b{font-size:12px;}
+  .sheet .rem{margin-top:14px;font-size:11px;color:#444;border-top:1px dashed #bbb;padding-top:9px;line-height:1.8;}
+
+  @media print{
+    body{background:#fff;}
+    .no-print{display:none !important;}
+    .wrap{max-width:none;}
+    main{padding:0;}
+    .card{border:none;padding:0;margin:0;background:#fff;}
+    .sheet{border:none;border-radius:0;padding:0;}
+    @page{size:A4;margin:16mm;}
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
+
+<!-- ログイン画面 -->
+<div id="login">
+  <div class="box">
+    <div class="brand">SOMA FARM</div>
+    <h1>相馬牧場　売上・出荷管理</h1>
+    <label>ユーザー名</label>
+    <input id="lu" autocomplete="username" style="margin-bottom:12px">
+    <label>パスワード</label>
+    <input id="lp" type="password" autocomplete="current-password" style="margin-bottom:16px">
+    <button class="btn" id="lbtn">ログイン</button>
+    <div class="err" id="lerr"></div>
+  </div>
+</div>
+
+<!-- アプリ本体 -->
+<div class="wrap" id="app" style="display:none">
+  <header class="no-print">
     <div class="brand">SOMA FARM</div>
     <div class="title">相馬牧場　売上・出荷管理</div>
     <span id="badge" class="badge"></span>
+    <div class="who"><span id="whoami"></span><br><button id="logout">ログアウト</button></div>
   </header>
-  <nav id="nav"></nav>
+  <nav id="nav" class="no-print"></nav>
   <main id="main"></main>
 </div>
 
 <script>
-// ============ データ層 ============
-// 保存先：接続URL(GAS)があればスプレッドシート、なければこの端末(localStorage)。
-const LS = {
-  get(k, f){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):f; }catch(e){ return f; } },
-  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
-};
-const SEED = [
-  {id:'p1',customer:'onomichi U2',item:'牛乳',price:270},
-  {id:'p2',customer:'onomichi U2',item:'ヨーグルト',price:450},
-  {id:'p3',customer:'せとうちクルーズ',item:'牛乳',price:270},
-  {id:'p4',customer:'TLB（Log）',item:'牛乳',price:270},
-  {id:'p5',customer:'神石高原ティアガルテン',item:'ソフトクリームミックス',price:1200},
-];
-const api = {
-  async load(url){ const r=await fetch(url+(url.includes('?')?'&':'?')+'action=load'); return r.json(); },
-  async saveRecord(url,record){ await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'saveRecord',record})}); },
-  async saveProducts(url,products){ await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'saveProducts',products})}); },
-};
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbyr7svzKdsCLHRDq5fkH6a9ZUql0a1BG5nDxsrjfeuIgoE12BWhoOI4LGahpgWxFxRQTA/exec';
 
-// ============ 状態 ============
-const state = {
-  tab:'input', period:'day', anchor:today(),
-  gasUrl:'', mode:'loading', products:[], records:[], busy:false,
+const LS = {
+  get(k,f){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):f; }catch(e){ return f; } },
+  set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} },
+  del(k){ try{ localStorage.removeItem(k); }catch(e){} }
 };
+const S = { user:'', pw:'', tab:'input', period:'day', anchor:today(),
+            products:[], records:[], payments:{}, busy:false, mode:'' };
+
 function today(){ return new Date().toISOString().slice(0,10); }
 function yen(n){ return '¥'+Math.round(n||0).toLocaleString('ja-JP'); }
+function num(n){ return Math.round(n||0).toLocaleString('ja-JP'); }
 function uid(){ return Math.random().toString(36).slice(2,9); }
 function groupBy(ps){ const g={}; ps.forEach(p=>{(g[p.customer]=g[p.customer]||[]).push(p);}); return g; }
+function jpDate(s){ if(!s) return ''; const [y,m,d]=s.split('-'); return `${y}年${+m}月${+d}日`; }
+function jpMonth(s){ const [y,m]=s.split('-'); return `${y}年${+m}月`; }
 
-async function boot(){
-  state.gasUrl = 'https://script.google.com/macros/s/AKfycbyr7svzKdsCLHRDq5fkH6a9ZUql0a1BG5nDxsrjfeuIgoE12BWhoOI4LGahpgWxFxRQTA/exec';
-  if(state.gasUrl){
-    try{
-      const d = await api.load(state.gasUrl);
-      if(d && d.ok){ state.products=d.products&&d.products.length?d.products:SEED; state.records=d.records||[]; state.mode='live'; render(); return; }
-      state.mode='error';
-    }catch(e){ state.mode='error'; }
+async function apiLoad(){
+  const u = GAS_URL+'?action=load&user='+encodeURIComponent(S.user)+'&pw='+encodeURIComponent(S.pw);
+  const r = await fetch(u); return r.json();
+}
+async function apiPost(payload){
+  const body = Object.assign({user:S.user, pw:S.pw}, payload);
+  const r = await fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)});
+  return r.json();
+}
+
+// ── ログイン ──
+document.getElementById('lbtn').onclick = doLogin;
+document.getElementById('lp').addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); });
+
+async function doLogin(){
+  const u=document.getElementById('lu').value.trim();
+  const p=document.getElementById('lp').value;
+  const err=document.getElementById('lerr');
+  const btn=document.getElementById('lbtn');
+  if(!u||!p){ err.textContent='ユーザー名とパスワードを入力してください。'; err.style.display='block'; return; }
+  btn.textContent='確認中…'; btn.disabled=true; err.style.display='none';
+  S.user=u; S.pw=p;
+  try{
+    const d = await apiLoad();
+    if(d && d.ok){
+      LS.set('auth',{u,p});
+      S.products=d.products&&d.products.length?d.products:[];
+      S.records=d.records||[]; S.payments=d.payments||{}; S.mode='live';
+      showApp();
+    }else{
+      err.textContent='ユーザー名またはパスワードが違います。'; err.style.display='block';
+    }
+  }catch(e){
+    err.textContent='接続できませんでした。通信環境をご確認ください。'; err.style.display='block';
   }
-  state.products = LS.get('products',null) || SEED;
-  state.records  = LS.get('records',[]) || [];
-  if(state.mode!=='error') state.mode='local';
+  btn.textContent='ログイン'; btn.disabled=false;
+}
+
+document.getElementById('logout').onclick = ()=>{
+  LS.del('auth'); location.reload();
+};
+
+function showApp(){
+  document.getElementById('login').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('whoami').textContent = S.user + ' さん';
   render();
+}
+
+// 自動ログイン
+(async function(){
+  const a = LS.get('auth',null);
+  if(a && a.u && a.p){
+    S.user=a.u; S.pw=a.p;
+    try{
+      const d = await apiLoad();
+      if(d && d.ok){
+        S.products=d.products||[]; S.records=d.records||[]; S.payments=d.payments||{}; S.mode='live';
+        showApp(); return;
+      }
+    }catch(e){}
+    LS.del('auth');
+  }
+})();
+
+async function reload(){
+  try{ const d=await apiLoad(); if(d&&d.ok){ S.products=d.products||[]; S.records=d.records||[]; S.payments=d.payments||{}; } }catch(e){}
 }
 async function saveRecord(rec){
-  state.records = state.records.filter(r=>r.date!==rec.date).concat([rec]).sort((a,b)=>a.date.localeCompare(b.date));
-  if(state.mode==='live'){ state.busy=true; render(); try{ await api.saveRecord(state.gasUrl,rec); }catch(e){} state.busy=false; }
-  else LS.set('records',state.records);
-  render();
+  S.records = S.records.filter(r=>r.date!==rec.date).concat([rec]).sort((a,b)=>a.date.localeCompare(b.date));
+  S.busy=true; render();
+  try{ await apiPost({action:'saveRecord',record:rec}); }catch(e){}
+  S.busy=false; render();
 }
 async function saveProducts(list){
-  state.products = list;
-  if(state.mode==='live'){ state.busy=true; render(); try{ await api.saveProducts(state.gasUrl,list); }catch(e){} state.busy=false; }
-  else LS.set('products',state.products);
-  render();
+  S.products=list; S.busy=true; render();
+  try{ await apiPost({action:'saveProducts',products:list}); }catch(e){}
+  S.busy=false; render();
 }
-async function connect(url){ LS.set('config:gasUrl',(url||'').trim()); state.mode='loading'; render(); boot(); }
+async function savePayment(key,status,paidDate){
+  S.payments[key]={status,paidDate,memo:''}; S.busy=true; render();
+  try{ await apiPost({action:'savePayment',payment:{key,status,paidDate,memo:''}}); }catch(e){}
+  S.busy=false; render();
+}
 
-// ============ 画面 ============
+// ── 描画 ──
 function render(){
-  const badge = document.getElementById('badge');
-  const m = {live:['スプレッドシート接続中','var(--accent)'],local:['ローカルモード（未接続）','var(--gold)'],error:['接続エラー（設定を確認）','var(--danger)'],loading:['…','var(--sub)']}[state.mode];
-  badge.textContent = m[0] + (state.busy?'　保存中…':''); badge.style.color=m[1]; badge.style.border='1px solid '+m[1];
+  const b=document.getElementById('badge');
+  b.textContent = S.busy?'保存中…':'スプレッドシート接続中';
+  b.style.color=S.busy?'var(--gold)':'var(--accent)';
+  b.style.border='1px solid '+(S.busy?'var(--gold)':'var(--accent)');
 
-  const nav = document.getElementById('nav');
-  const tabs = [['input','入力'],['report','集計'],['docs','帳票'],['settings','設定']];
-  nav.innerHTML = tabs.map(([k,l])=>`<button class="${state.tab===k?'on':''}" data-tab="${k}">${l}</button>`).join('');
-  nav.querySelectorAll('button').forEach(b=>b.onclick=()=>{state.tab=b.dataset.tab;render();});
+  const nav=document.getElementById('nav');
+  const tabs=[['input','入力'],['report','集計'],['docs','帳票'],['pay','入金'],['settings','設定']];
+  nav.innerHTML=tabs.map(([k,l])=>`<button class="${S.tab===k?'on':''}" data-tab="${k}">${l}</button>`).join('');
+  nav.querySelectorAll('button').forEach(x=>x.onclick=()=>{S.tab=x.dataset.tab;render();});
 
-  const main = document.getElementById('main');
-  if(state.mode==='loading'){ main.innerHTML='<div style="padding:40px;color:var(--sub)">読み込み中…</div>'; return; }
-  if(state.tab==='input') renderInput(main);
-  if(state.tab==='report') renderReport(main);
-  if(state.tab==='docs') renderDocs(main);
-  if(state.tab==='settings') renderSettings(main);
+  const m=document.getElementById('main');
+  if(S.tab==='input') vInput(m);
+  if(S.tab==='report') vReport(m);
+  if(S.tab==='docs') vDocs(m);
+  if(S.tab==='pay') vPay(m);
+  if(S.tab==='settings') vSettings(m);
 }
 
-function renderInput(main){
-  const date = state._inputDate || today();
-  const e = state.records.find(r=>r.date===date) || {};
-  const sales = state._sales || e.sales || {};
-  let html = `<div class="card"><h3>日付</h3><input type="date" id="d" value="${date}">${e.date?'<div style="font-size:12px;color:var(--accent);margin-top:6px">この日の記録を編集しています</div>':''}</div>`;
-  html += `<div class="card"><h3>毎日の乳量</h3><div class="row"><input type="number" id="milk" value="${e.milk??''}" placeholder="0"><span style="color:var(--sub)">L</span></div></div>`;
-  html += `<div class="card"><h3>広酪への出荷量</h3><div class="row"><input type="number" id="ship" value="${e.shipGyoraku??''}" placeholder="0"><span style="color:var(--sub)">L</span></div></div>`;
-  html += `<div class="card"><h3>販売数（販売先・商品別）</h3>`;
-  const g = groupBy(state.products);
-  for(const cust in g){
-    html += `<p class="cust">${cust}</p>`;
-    g[cust].forEach(p=>{
-      const q = sales[p.id]??'';
-      html += `<div class="row"><div style="flex:1;font-size:14px">${p.item}<span style="color:var(--sub);font-size:12px">　${yen(p.price)}/点</span></div>
-        <input type="number" class="q" data-id="${p.id}" value="${q}" placeholder="0" style="width:90px;flex:none;text-align:right">
-        <div class="money" data-money="${p.id}">${yen((Number(q)||0)*p.price)}</div></div>`;
+function vInput(m){
+  const date=S._d||today();
+  const e=S.records.find(r=>r.date===date)||{};
+  const sales=S._s||e.sales||{};
+  const custs=[...new Set(S.products.map(p=>p.customer))];
+  const filt=S._fc||'__all__';
+
+  let h=`<div class="card"><h3>日付</h3><input type="date" id="d" value="${date}">${e.date?'<div style="font-size:12px;color:var(--accent);margin-top:6px">この日の記録を編集しています</div>':''}</div>`;
+  h+=`<div class="card"><h3>毎日の乳量</h3><div class="row"><input type="number" id="milk" value="${e.milk??''}" placeholder="0"><span style="color:var(--sub)">L</span></div></div>`;
+  h+=`<div class="card"><h3>広酪への出荷量</h3><div class="row"><input type="number" id="ship" value="${e.shipGyoraku??''}" placeholder="0"><span style="color:var(--sub)">L</span></div></div>`;
+
+  h+=`<div class="card"><h3>販売数（販売先・商品別）</h3>
+    <label>販売先で絞り込む</label>
+    <select id="fc" style="margin-bottom:14px">
+      <option value="__all__" ${filt==='__all__'?'selected':''}>すべて表示（${custs.length}社）</option>
+      <option value="__entered__" ${filt==='__entered__'?'selected':''}>入力済みのみ表示</option>
+      ${custs.map(c=>`<option value="${c}" ${filt===c?'selected':''}>${c}</option>`).join('')}
+    </select>`;
+
+  const g=groupBy(S.products);
+  let shown=0;
+  for(const c in g){
+    let list=g[c];
+    if(filt!=='__all__' && filt!=='__entered__' && filt!==c) continue;
+    if(filt==='__entered__') list=list.filter(p=>Number(sales[p.id])>0);
+    if(!list.length) continue;
+    shown++;
+    const csub=list.reduce((s2,p)=>s2+(Number(sales[p.id])||0)*p.price,0);
+    h+=`<p class="cust">${c}${csub?`<span style="float:right;font-weight:700">${yen(csub)}</span>`:''}</p>`;
+    list.forEach(p=>{
+      const q=sales[p.id]??'';
+      h+=`<div class="row"><div style="flex:1;font-size:14px">${p.item}<span style="color:var(--sub);font-size:12px">　${yen(p.price)}/点</span></div>
+      <input type="number" class="q" data-id="${p.id}" value="${q}" placeholder="0" style="width:84px;flex:none;text-align:right">
+      <div class="money" data-mn="${p.id}">${yen((Number(q)||0)*p.price)}</div></div>`;
     });
   }
-  const tot = state.products.reduce((s,p)=>s+(Number(sales[p.id])||0)*p.price,0);
-  html += `<div class="tot"><span>この日の売上合計</span><span id="daytot" style="color:var(--accent)">${yen(tot)}</span></div></div>`;
-  html += `<button class="btn" id="save">この日の記録を保存</button>`;
-  main.innerHTML = html;
+  if(!shown) h+=`<div style="color:var(--sub);font-size:13px;padding:10px 0">表示できる商品がありません。</div>`;
 
-  document.getElementById('d').onchange = ev=>{ state._inputDate=ev.target.value; state._sales=null; render(); };
-  main.querySelectorAll('.q').forEach(inp=>{
-    inp.oninput = ()=>{
-      const id=inp.dataset.id; const s={...(state._sales||e.sales||{})}; s[id]=inp.value; state._sales=s;
-      const p=state.products.find(x=>x.id===id);
-      main.querySelector(`[data-money="${id}"]`).textContent = yen((Number(inp.value)||0)*p.price);
-      const t=state.products.reduce((sum,pp)=>sum+(Number(s[pp.id])||0)*pp.price,0);
-      document.getElementById('daytot').textContent = yen(t);
-    };
+  const t=S.products.reduce((s2,p)=>s2+(Number(sales[p.id])||0)*p.price,0);
+  h+=`<div class="tot"><span>この日の売上合計（全社）</span><span id="dt" style="color:var(--accent)">${yen(t)}</span></div></div>`;
+  h+=`<button class="btn" id="sv">この日の記録を保存</button>`;
+  m.innerHTML=h;
+
+  document.getElementById('d').onchange=ev=>{S._d=ev.target.value;S._s=null;render();};
+  document.getElementById('fc').onchange=ev=>{S._fc=ev.target.value;render();};
+  m.querySelectorAll('.q').forEach(i=>i.oninput=()=>{
+    const s2=Object.assign({},S._s||e.sales||{}); s2[i.dataset.id]=i.value; S._s=s2;
+    const p=S.products.find(x=>x.id===i.dataset.id);
+    m.querySelector(`[data-mn="${i.dataset.id}"]`).textContent=yen((Number(i.value)||0)*p.price);
+    document.getElementById('dt').textContent=yen(S.products.reduce((a,pp)=>a+(Number(s2[pp.id])||0)*pp.price,0));
   });
-  document.getElementById('save').onclick = ()=>{
-    const s = state._sales || e.sales || {};
-    saveRecord({date, milk:Number(document.getElementById('milk').value)||0, shipGyoraku:Number(document.getElementById('ship').value)||0, sales:s});
-    state._sales=null; alert('保存しました');
+  document.getElementById('sv').onclick=()=>{
+    saveRecord({date,milk:Number(document.getElementById('milk').value)||0,
+      shipGyoraku:Number(document.getElementById('ship').value)||0, sales:S._s||e.sales||{}});
+    S._s=null; alert('保存しました');
   };
 }
 
-function renderReport(main){
-  const {period,anchor} = state;
-  const filt = state.records.filter(r=> period==='day'?r.date===anchor : period==='month'?r.date.slice(0,7)===anchor.slice(0,7) : r.date.slice(0,4)===anchor.slice(0,4));
-  const milk = filt.reduce((s,r)=>s+(r.milk||0),0);
-  const ship = filt.reduce((s,r)=>s+(r.shipGyoraku||0),0);
+function periodRecords(){
+  const {period,anchor}=S;
+  return S.records.filter(r=> period==='day'?r.date===anchor : period==='month'?r.date.slice(0,7)===anchor.slice(0,7) : r.date.slice(0,4)===anchor.slice(0,4));
+}
+function vReport(m){
+  const f=periodRecords();
+  const milk=f.reduce((s,r)=>s+(r.milk||0),0), ship=f.reduce((s,r)=>s+(r.shipGyoraku||0),0);
   const map={};
-  filt.forEach(r=>state.products.forEach(p=>{const q=Number(r.sales?.[p.id])||0;if(!q)return;if(!map[p.id])map[p.id]={customer:p.customer,item:p.item,price:p.price,qty:0};map[p.id].qty+=q;}));
-  const rows = Object.values(map).map(x=>({...x,total:x.qty*x.price})).sort((a,b)=>b.total-a.total);
-  const grand = rows.reduce((s,x)=>s+x.total,0);
-  const inputType = period==='day'?'date':period==='month'?'month':'number';
-  const inputVal = period==='year'?anchor.slice(0,4):period==='month'?anchor.slice(0,7):anchor;
+  f.forEach(r=>S.products.forEach(p=>{const q=Number(r.sales?.[p.id])||0;if(!q)return;
+    if(!map[p.id])map[p.id]={customer:p.customer,item:p.item,price:p.price,qty:0};map[p.id].qty+=q;}));
+  const rows=Object.values(map).map(x=>({...x,total:x.qty*x.price})).sort((a,b)=>b.total-a.total);
+  const grand=rows.reduce((s,x)=>s+x.total,0);
+  const it=S.period==='day'?'date':S.period==='month'?'month':'number';
+  const iv=S.period==='year'?S.anchor.slice(0,4):S.period==='month'?S.anchor.slice(0,7):S.anchor;
 
-  let html = `<div class="card"><div class="seg">
-    ${[['day','日別'],['month','月別'],['year','年別']].map(([k,l])=>`<button class="${period===k?'on':''}" data-p="${k}">${l}</button>`).join('')}
-    </div><input type="${inputType}" id="anchor" value="${inputVal}"></div>`;
-  html += `<div class="stats">
-    <div class="stat"><div class="k">乳量</div><div class="v">${milk.toLocaleString()} L</div></div>
-    <div class="stat"><div class="k">広酪出荷</div><div class="v">${ship.toLocaleString()} L</div></div>
-    <div class="stat accent"><div class="k">売上合計</div><div class="v">${yen(grand)}</div></div></div>`;
-  html += `<div class="card"><h3>販売先・商品別の売上</h3>`;
-  if(!rows.length) html += `<div style="color:var(--sub);font-size:14px;padding:10px 0">この期間の販売記録はまだありません。</div>`;
+  let h=`<div class="card"><div class="seg">${[['day','日別'],['month','月別'],['year','年別']].map(([k,l])=>`<button class="${S.period===k?'on':''}" data-p="${k}">${l}</button>`).join('')}</div><input type="${it}" id="an" value="${iv}"></div>`;
+  h+=`<div class="stats"><div class="stat"><div class="k">乳量</div><div class="v">${num(milk)} L</div></div>
+   <div class="stat"><div class="k">広酪出荷</div><div class="v">${num(ship)} L</div></div>
+   <div class="stat accent"><div class="k">売上合計</div><div class="v">${yen(grand)}</div></div></div>`;
+  h+=`<div class="card"><h3>販売先・商品別の売上</h3>`;
+  if(!rows.length) h+=`<div style="color:var(--sub);font-size:14px;padding:10px 0">この期間の販売記録はまだありません。</div>`;
   else{
-    html += `<table><thead><tr><th>販売先</th><th>商品</th><th class="right">数量</th><th class="right">単価</th><th class="right">合計</th></tr></thead><tbody>`;
-    rows.forEach(r=> html+=`<tr><td>${r.customer}</td><td>${r.item}</td><td class="right">${r.qty}</td><td class="right">${yen(r.price)}</td><td class="right" style="font-weight:700">${yen(r.total)}</td></tr>`);
-    html += `</tbody><tfoot><tr style="border-top:2px solid var(--accent)"><td colspan="4" style="font-weight:800;padding:8px 4px">全体合計売上</td><td class="right" style="font-weight:800;color:var(--accent);padding:8px 4px">${yen(grand)}</td></tr></tfoot></table>`;
+    h+=`<table><thead><tr><th>販売先</th><th>商品</th><th class="right">数量</th><th class="right">単価</th><th class="right">合計</th></tr></thead><tbody>`;
+    rows.forEach(r=>h+=`<tr><td>${r.customer}</td><td>${r.item}</td><td class="right">${r.qty}</td><td class="right">${yen(r.price)}</td><td class="right" style="font-weight:700">${yen(r.total)}</td></tr>`);
+    h+=`</tbody><tfoot><tr style="border-top:2px solid var(--accent)"><td colspan="4" style="font-weight:800;padding:8px 4px">全体合計売上</td><td class="right" style="font-weight:800;color:var(--accent);padding:8px 4px">${yen(grand)}</td></tr></tfoot></table>`;
   }
-  html += `</div>`;
-  main.innerHTML = html;
-  main.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{state.period=b.dataset.p;render();});
-  document.getElementById('anchor').onchange = ev=>{ const v=ev.target.value; state.anchor = state.period==='year'?v+'-01-01':state.period==='month'?v+'-01':v; render(); };
+  h+=`</div>`;
+  m.innerHTML=h;
+  m.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{S.period=b.dataset.p;render();});
+  document.getElementById('an').onchange=ev=>{const v=ev.target.value;
+    S.anchor=S.period==='year'?v+'-01-01':S.period==='month'?v+'-01':v; render();};
 }
 
-function renderDocs(main){
-  const customers=[...new Set(state.products.map(p=>p.customer))];
-  const cust = state._docCust || customers[0] || '';
-  const month = state._docMonth || today().slice(0,7);
-  const kind = state._docKind || '請求書';
-  const recs = state.records.filter(r=>r.date.slice(0,7)===month);
-  const map={};
-  recs.forEach(r=>state.products.filter(p=>p.customer===cust).forEach(p=>{const q=Number(r.sales?.[p.id])||0;if(!q)return;if(!map[p.id])map[p.id]={item:p.item,price:p.price,qty:0};map[p.id].qty+=q;}));
-  const lines = Object.values(map).map(x=>({...x,total:x.qty*x.price}));
-  const total = lines.reduce((s,x)=>s+x.total,0); const tax=Math.floor(total*0.08);
-
-  let html = `<div class="card"><h3>帳票を作成</h3>
-    <label>種類</label><div class="seg">${['納品書','請求書','入金確認'].map(k=>`<button class="${kind===k?'on':''}" data-k="${k}">${k}</button>`).join('')}</div>
-    <label>販売先</label><select id="dc" style="margin-bottom:12px">${customers.map(c=>`<option ${c===cust?'selected':''}>${c}</option>`).join('')}</select>
-    <label>対象月</label><input type="month" id="dm" value="${month}"></div>`;
-  html += `<div class="card"><div class="doc">
-    <div style="text-align:center;font-size:18px;font-weight:800;letter-spacing:4px">${kind}</div>
-    <div style="text-align:center;font-size:11px;color:var(--sub);margin-bottom:16px">${month} 分</div>
-    <div style="font-size:14px;font-weight:700">${cust}　御中</div>
-    <div class="right" style="font-size:11px;color:var(--sub);margin-bottom:12px">株式会社相馬牧場<br>広島県神石郡神石高原町油木乙6673番地<br>登録番号：T〔　　　　　　　〕</div>`;
-  if(kind==='入金確認') html += `<div style="padding:16px 0;font-size:14px">請求額 <b>${yen(total+tax)}</b> に対する入金の消込状況を管理する画面です。<br><span style="color:var(--sub);font-size:12px">本番では「入金済み／未入金」をここで記録します。</span></div>`;
-  else if(!lines.length) html += `<div style="color:var(--sub);font-size:13px;padding:12px 0">この月・この販売先の記録がありません。</div>`;
-  else{
-    html += `<table><thead><tr><th>商品</th><th class="right">数量</th><th class="right">単価</th><th class="right">金額</th></tr></thead><tbody>`;
-    lines.forEach(l=> html+=`<tr><td>${l.item}</td><td class="right">${l.qty}</td><td class="right">${yen(l.price)}</td><td class="right">${yen(l.total)}</td></tr>`);
-    html += `</tbody></table><div class="right" style="margin-top:12px;font-size:13px"><div>小計　${yen(total)}</div>${kind==='請求書'?`<div style="color:var(--sub)">消費税(8%)　${yen(tax)}</div>`:''}<div style="font-size:16px;font-weight:800;margin-top:4px;color:var(--accent)">${kind==='請求書'?'ご請求額':'合計'}　${yen(kind==='請求書'?total+tax:total)}</div></div>`;
+// 明細を組み立て（納品書は日別、請求書は品目集約）
+function docLines(cust,month,byDate){
+  const recs=S.records.filter(r=>r.date.slice(0,7)===month).sort((a,b)=>a.date.localeCompare(b.date));
+  const mine=S.products.filter(p=>p.customer===cust);
+  if(byDate){
+    const out=[];
+    recs.forEach(r=>mine.forEach(p=>{const q=Number(r.sales?.[p.id])||0;if(!q)return;
+      out.push({date:r.date,item:p.item,qty:q,price:p.price,total:q*p.price});}));
+    return out;
   }
-  html += `</div><div class="note">※ 印刷は、ブラウザの「印刷 → PDFに保存」で出力できます。</div></div>`;
-  main.innerHTML = html;
-  main.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{state._docKind=b.dataset.k;render();});
-  document.getElementById('dc').onchange = ev=>{state._docCust=ev.target.value;render();};
-  document.getElementById('dm').onchange = ev=>{state._docMonth=ev.target.value;render();};
+  const map={};
+  recs.forEach(r=>mine.forEach(p=>{const q=Number(r.sales?.[p.id])||0;if(!q)return;
+    if(!map[p.id])map[p.id]={item:p.item,price:p.price,qty:0};map[p.id].qty+=q;}));
+  return Object.values(map).map(x=>({...x,total:x.qty*x.price}));
 }
 
-function renderSettings(main){
-  const g = groupBy(state.products);
-  let html = `<div class="card"><h3>接続設定（Googleスプレッドシート）</h3>
-    <div class="note" style="margin-top:0;margin-bottom:10px">GASで公開した /exec のURLを貼って「接続する」を押すと、携帯とPCで同じデータを共有できます。空のままだと、この端末内だけの試用になります。</div>
-    <input id="gas" value="${state.gasUrl||''}" placeholder="https://script.google.com/macros/s/××××/exec" style="margin-bottom:10px;font-size:13px">
-    <button class="btn" id="conn">接続する</button>`;
-  if(state.mode==='error') html += `<div style="color:var(--danger);font-size:12px;margin-top:8px">接続できませんでした。URLと、GASの公開設定（アクセス：全員）をご確認ください。</div>`;
-  if(state.mode==='live') html += `<div style="color:var(--accent);font-size:12px;margin-top:8px">接続済みです。入力はスプレッドシートに保存されます。</div>`;
-  html += `</div>`;
+function vDocs(m){
+  const custs=[...new Set(S.products.map(p=>p.customer))];
+  const cust=S._dc||custs[0]||'';
+  const month=S._dm||today().slice(0,7);
+  const kind=S._dk||'請求書';
+  const isInv = kind==='請求書';
+  const lines = docLines(cust,month,!isInv);
+  const sub=lines.reduce((s,x)=>s+x.total,0);
+  const tax=Math.floor(sub*0.08);
+  const total=sub+tax;
+  const [yy,mm]=month.split('-');
+  const lastDay=new Date(+yy,+mm,0).getDate();
+  const issue=`${yy}-${mm}-${String(lastDay).padStart(2,'0')}`;
+  const dueD=new Date(+yy,+mm,lastDay); // 翌月末
+  const due=`${dueD.getFullYear()}-${String(dueD.getMonth()+1).padStart(2,'0')}-${String(new Date(dueD.getFullYear(),dueD.getMonth()+1,0).getDate()).padStart(2,'0')}`;
+  const docNo=`${yy}${mm}-${(custs.indexOf(cust)+1+'').padStart(3,'0')}`;
 
-  html += `<div class="card"><h3>販売先・商品ごとの単価</h3><div class="note" style="margin-top:0;margin-bottom:12px">ここで登録した単価で金額を自動計算します。牛乳は270円/本で登録済みです。</div>`;
-  for(const cust in g){
-    html += `<p class="cust">${cust}</p>`;
-    g[cust].forEach(p=>{
-      html += `<div class="row"><div style="flex:1;font-size:14px">${p.item}</div>
-        <input type="number" class="price" data-id="${p.id}" value="${p.price}" style="width:100px;flex:none;text-align:right">
+  let h=`<div class="card no-print"><h3>帳票を作成</h3>
+    <label>種類</label><div class="seg">${['納品書','請求書'].map(k=>`<button class="${kind===k?'on':''}" data-k="${k}">${k}</button>`).join('')}</div>
+    <label>販売先</label><select id="dc" style="margin-bottom:12px">${custs.map(c=>`<option ${c===cust?'selected':''}>${c}</option>`).join('')}</select>
+    <label>対象月</label><input type="month" id="dm" value="${month}" style="margin-bottom:12px">
+    <button class="btn" id="pr">印刷 / PDFで保存</button>
+    <div class="note">印刷画面で「PDFに保存」を選ぶとPDFになります。</div></div>`;
+
+  h+=`<div class="card"><div class="sheet">
+    <div class="dtitle">${kind}</div><div class="drule"></div>
+    <div class="meta">
+      <div class="to">
+        <div class="nm">${cust}　御中</div>
+        <div class="sub">
+          ${isInv?`件名：${jpMonth(month)}分 乳製品代`:`${jpMonth(month)}分として、下記のとおり納品いたしました。`}<br>
+          ${kind}番号：${docNo}
+        </div>
+      </div>
+      <div class="from">
+        発行日：${jpDate(issue)}<br>
+        <span class="co">株式会社相馬牧場</span><br>
+        広島県神石郡神石高原町油木乙6673番地<br>
+        TEL：〔　　　　　　　〕<br>
+        登録番号：T〔　　　　　　　　　　　〕
+        <div class="seal">印</div>
+      </div>
+    </div>`;
+
+  if(isInv){
+    h+=`<div class="grand"><span class="lbl">ご請求金額</span><span class="amt">${yen(total)}</span></div>
+        <div class="lead">下記のとおりご請求申し上げます。お支払期限：${jpDate(due)}</div>`;
+  }
+
+  if(!lines.length){
+    h+=`<div style="padding:26px 0;text-align:center;color:#777;font-size:13px">この月・この販売先の記録がありません。</div>`;
+  }else{
+    h+=`<table class="items"><thead><tr>
+      ${isInv?'':'<th style="width:78px">納品日</th>'}
+      <th>品名</th><th style="width:64px">数量</th><th style="width:82px">単価</th><th style="width:96px">金額</th></tr></thead><tbody>`;
+    lines.forEach(l=>{
+      h+=`<tr>${isInv?'':`<td class="c">${l.date.slice(5).replace('-','/')}</td>`}
+        <td>${l.item}</td><td class="n">${num(l.qty)}</td><td class="n">${num(l.price)}</td><td class="n">${num(l.total)}</td></tr>`;
+    });
+    const blanks=Math.max(0,4-lines.length);
+    for(let i=0;i<blanks;i++) h+=`<tr class="blank"><td colspan="${isInv?4:5}"></td></tr>`;
+    h+=`</tbody></table>
+      <div class="sumbox">
+        <div><span>小計（税抜）</span><span>${yen(sub)}</span></div>
+        <div><span>消費税（軽減8%）</span><span>${yen(tax)}</span></div>
+        <div class="fin"><span>${isInv?'ご請求金額':'合計金額'}</span><span>${yen(total)}</span></div>
+      </div>`;
+  }
+
+  if(isInv){
+    h+=`<div class="bank"><b>お振込先</b><br>
+      〔金融機関〕　〔支店名〕<br>
+      普通　〔口座番号〕<br>
+      口座名義：カ）ソウマボクジョウ<br>
+      ※ 振込手数料は貴社にてご負担願います。</div>`;
+  }
+  h+=`<div class="rem">※ 本${kind}の記載は軽減税率（8%）対象の飲食料品です。<br>
+      ※ ご不明な点は上記連絡先までお問い合わせください。</div>`;
+  h+=`</div></div>`;
+  m.innerHTML=h;
+
+  m.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{S._dk=b.dataset.k;render();});
+  document.getElementById('dc').onchange=e=>{S._dc=e.target.value;render();};
+  document.getElementById('dm').onchange=e=>{S._dm=e.target.value;render();};
+  document.getElementById('pr').onclick=()=>window.print();
+}
+
+function vPay(m){
+  const month=S._pm||today().slice(0,7);
+  const custs=[...new Set(S.products.map(p=>p.customer))];
+  let h=`<div class="card"><h3>入金確認</h3><label>対象月</label><input type="month" id="pm" value="${month}"></div>`;
+  h+=`<div class="card"><table><thead><tr><th>販売先</th><th class="right">請求額</th><th class="center">状況</th></tr></thead><tbody>`;
+  let any=false;
+  custs.forEach(c=>{
+    const l=docLines(c,month,false); const sub=l.reduce((s,x)=>s+x.total,0);
+    if(!sub) return; any=true;
+    const key=c+'|'+month; const st=S.payments[key]?.status||'未入金';
+    const paid=st==='入金済';
+    h+=`<tr><td>${c}</td><td class="right">${yen(sub+Math.floor(sub*0.08))}</td>
+      <td class="center"><button data-key="${key}" data-next="${paid?'未入金':'入金済'}"
+      style="border:1px solid ${paid?'var(--accent)':'var(--line)'};background:${paid?'var(--accent)':'var(--card)'};
+      color:${paid?'#fff':'var(--sub)'};border-radius:14px;padding:4px 12px;font-size:12px;font-weight:700;cursor:pointer">
+      ${st}</button></td></tr>`;
+  });
+  if(!any) h+=`<tr><td colspan="3" style="color:var(--sub);font-size:13px;padding:14px 4px">この月の請求はありません。</td></tr>`;
+  h+=`</tbody></table><div class="note">状況のボタンを押すと「未入金 / 入金済」が切り替わり、スプレッドシートに保存されます。</div></div>`;
+  m.innerHTML=h;
+  document.getElementById('pm').onchange=e=>{S._pm=e.target.value;render();};
+  m.querySelectorAll('[data-key]').forEach(b=>b.onclick=()=>{
+    savePayment(b.dataset.key,b.dataset.next,b.dataset.next==='入金済'?today():'');
+  });
+}
+
+function vSettings(m){
+  const g=groupBy(S.products);
+  let h=`<div class="card"><h3>販売先・商品ごとの単価</h3>
+    <div class="note" style="margin-top:0;margin-bottom:12px">ここで登録した単価で金額を自動計算します。</div>`;
+  for(const c in g){
+    h+=`<p class="cust">${c}</p>`;
+    g[c].forEach(p=>{
+      h+=`<div class="row"><div style="flex:1;font-size:14px">${p.item}</div>
+        <input type="number" class="pz" data-id="${p.id}" value="${p.price}" style="width:100px;flex:none;text-align:right">
         <span style="font-size:12px;color:var(--sub)">円</span>
         <button class="del" data-del="${p.id}">×</button></div>`;
     });
   }
-  html += `</div>`;
-
-  html += `<div class="card"><h3>新しい商品を追加</h3>
+  h+=`</div><div class="card"><h3>新しい商品を追加</h3>
     <label>販売先</label><input id="nc" placeholder="例：onomichi U2" style="margin-bottom:8px">
     <label>商品名</label><input id="ni" placeholder="例：牛乳" style="margin-bottom:8px">
     <label>単価（円／点）</label><input id="np" type="number" placeholder="例：270" style="margin-bottom:12px">
     <button class="btn" id="add">追加する</button></div>`;
-  main.innerHTML = html;
-
-  document.getElementById('conn').onclick = ()=> connect(document.getElementById('gas').value);
-  main.querySelectorAll('.price').forEach(inp=> inp.onblur=()=>{ const list=state.products.map(p=>p.id===inp.dataset.id?{...p,price:Number(inp.value)||0}:p); saveProducts(list); });
-  main.querySelectorAll('[data-del]').forEach(b=> b.onclick=()=> saveProducts(state.products.filter(p=>p.id!==b.dataset.del)) );
-  document.getElementById('add').onclick = ()=>{
-    const c=document.getElementById('nc').value, i=document.getElementById('ni').value, pr=document.getElementById('np').value;
-    if(!c||!i||!pr) return;
-    saveProducts([...state.products,{id:uid(),customer:c.trim(),item:i.trim(),price:Number(pr)||0}]);
+  h+=`<div class="card"><h3>データの再読み込み</h3>
+    <div class="note" style="margin-top:0;margin-bottom:12px">他の端末で入力した内容を取り込みます。</div>
+    <button class="btn sub" id="rl">最新の内容を読み込む</button></div>`;
+  m.innerHTML=h;
+  m.querySelectorAll('.pz').forEach(i=>i.onblur=()=>saveProducts(S.products.map(p=>p.id===i.dataset.id?{...p,price:Number(i.value)||0}:p)));
+  m.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>saveProducts(S.products.filter(p=>p.id!==b.dataset.del)));
+  document.getElementById('add').onclick=()=>{
+    const c=document.getElementById('nc').value,i=document.getElementById('ni').value,p=document.getElementById('np').value;
+    if(!c||!i||!p) return;
+    saveProducts([...S.products,{id:uid(),customer:c.trim(),item:i.trim(),price:Number(p)||0}]);
   };
+  document.getElementById('rl').onclick=async()=>{ await reload(); render(); alert('読み込みました'); };
 }
-
-boot();
 </script>
 </body>
 </html>
