@@ -56,31 +56,40 @@
   .right{text-align:right;} .center{text-align:center;}
 
   /* ── 帳票（納品書・請求書） ── */
-  .sheet{background:#fff;border:1px solid var(--line);border-radius:6px;padding:30px 28px;font-family:'Yu Mincho','Hiragino Mincho ProN',serif;color:#111;}
-  .sheet .dtitle{text-align:center;font-size:25px;font-weight:700;letter-spacing:10px;margin:0 0 4px;}
-  .sheet .drule{width:120px;height:2px;background:#111;margin:0 auto 22px;}
-  .sheet .meta{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px;gap:20px;}
+  .sheet{background:#fff;border:1px solid var(--line);border-radius:4px;padding:28px 26px;
+    font-family:'Yu Gothic','Hiragino Kaku Gothic ProN',sans-serif;color:#111;font-size:12px;}
+  .sheet .dtitle{text-align:center;font-size:24px;font-weight:700;letter-spacing:12px;margin:0 0 20px;}
+  .sheet .hdr{display:flex;justify-content:flex-end;margin-bottom:14px;}
+  .sheet .hdr table{border-collapse:collapse;font-size:11px;}
+  .sheet .hdr td{border:1px solid #999;padding:4px 10px;}
+  .sheet .hdr td.k{background:#f2f1ec;font-weight:700;text-align:right;white-space:nowrap;}
+  .sheet .hdr td.v{text-align:center;min-width:120px;}
+  .sheet .meta{display:flex;justify-content:space-between;gap:24px;margin-bottom:16px;}
   .sheet .to{flex:1;}
-  .sheet .to .nm{font-size:17px;font-weight:700;border-bottom:1px solid #111;padding-bottom:5px;display:inline-block;min-width:230px;}
-  .sheet .to .sub{font-size:11px;color:#555;margin-top:8px;line-height:1.7;}
-  .sheet .from{font-size:11px;line-height:1.8;text-align:left;min-width:230px;position:relative;}
+  .sheet .to .nm{font-size:15px;font-weight:700;border-bottom:1px solid #111;padding-bottom:6px;}
+  .sheet .to .sbj{margin-top:14px;font-size:11px;}
+  .sheet .from{min-width:250px;font-size:11px;line-height:1.85;}
   .sheet .from .co{font-size:14px;font-weight:700;}
-  .sheet .seal{position:absolute;right:0;bottom:0;width:42px;height:42px;border:1px solid #c33;border-radius:3px;color:#c33;font-size:9px;display:flex;align-items:center;justify-content:center;opacity:.6;}
-  .sheet .lead{font-size:12px;margin:0 0 14px;}
-  .sheet .grand{border:2px solid #111;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
-  .sheet .grand .lbl{font-size:13px;font-weight:700;letter-spacing:2px;}
-  .sheet .grand .amt{font-size:23px;font-weight:700;}
-  .sheet table.items{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:14px;}
-  .sheet table.items th{background:#f0efe9;border:1px solid #999;padding:7px 6px;font-weight:700;color:#111;text-align:center;font-size:11px;}
-  .sheet table.items td{border:1px solid #bbb;padding:7px 6px;}
-  .sheet table.items td.n{text-align:right;} .sheet table.items td.c{text-align:center;}
-  .sheet table.items tr.blank td{height:26px;}
-  .sheet .sumbox{margin-left:auto;width:270px;font-size:12px;}
-  .sheet .sumbox div{display:flex;justify-content:space-between;padding:5px 8px;border-bottom:1px solid #ddd;}
-  .sheet .sumbox div.fin{border-top:2px solid #111;border-bottom:none;font-size:15px;font-weight:700;padding-top:8px;}
-  .sheet .bank{margin-top:18px;border:1px solid #999;padding:11px 13px;font-size:11px;line-height:1.9;}
-  .sheet .bank b{font-size:12px;}
-  .sheet .rem{margin-top:14px;font-size:11px;color:#444;border-top:1px dashed #bbb;padding-top:9px;line-height:1.8;}
+  .sheet .grand{border:2px solid #111;display:flex;align-items:stretch;margin:12px 0 10px;}
+  .sheet .grand .lbl{flex:1;display:flex;align-items:center;justify-content:center;
+    font-size:14px;font-weight:700;padding:10px;border-right:2px solid #111;}
+  .sheet .grand .amt{width:46%;text-align:right;font-size:20px;font-weight:700;padding:10px 14px;}
+  .sheet .due{font-size:11px;margin-bottom:14px;display:flex;justify-content:space-between;}
+  .sheet table.items{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:12px;}
+  .sheet table.items th{background:#e8efec;border:1px solid #999;padding:6px 4px;font-weight:700;text-align:center;}
+  .sheet table.items td{border:1px solid #bbb;padding:6px 5px;}
+  .sheet table.items td.n{text-align:right;}
+  .sheet table.items td.c{text-align:center;}
+  .sheet table.items tr.blank td{height:24px;}
+  .sheet table.sum{margin-left:auto;width:300px;border-collapse:collapse;font-size:11px;}
+  .sheet table.sum td{padding:5px 9px;border:1px solid #ccc;}
+  .sheet table.sum td.k{background:#f7f6f2;text-align:right;}
+  .sheet table.sum td.v{text-align:right;width:115px;}
+  .sheet table.sum tr.fin td{border-top:2px solid #111;font-size:14px;font-weight:700;background:#fff;}
+  .sheet .bank{margin-top:16px;border:1px solid #999;padding:10px 12px;font-size:11px;line-height:1.9;}
+  .sheet .memo{margin-top:12px;border:1px solid #999;padding:8px 12px;font-size:11px;min-height:44px;}
+  .sheet .memo b{font-size:11px;}
+  .sheet .rem{margin-top:12px;font-size:10.5px;color:#444;border-top:1px dashed #bbb;padding-top:8px;line-height:1.7;}
 
   @media print{
     body{background:#fff;}
@@ -100,11 +109,28 @@
   <div class="box">
     <div class="brand">SOMA FARM</div>
     <h1>相馬牧場　売上・出荷管理</h1>
-    <label>ユーザー名</label>
-    <input id="lu" autocomplete="username" style="margin-bottom:12px">
-    <label>パスワード</label>
-    <input id="lp" type="password" autocomplete="current-password" style="margin-bottom:16px">
-    <button class="btn" id="lbtn">ログイン</button>
+
+    <div id="stepLogin">
+      <label>ユーザー名</label>
+      <input id="lu" autocomplete="username" style="margin-bottom:12px">
+      <label>パスワード</label>
+      <input id="lp" type="password" autocomplete="current-password" style="margin-bottom:16px">
+      <button class="btn" id="lbtn">ログイン</button>
+    </div>
+
+    <div id="stepSetup" style="display:none">
+      <div style="background:var(--soft);border-radius:8px;padding:12px;margin-bottom:16px;font-size:13px;line-height:1.7">
+        <b id="setupWho"></b> さんの初回ログインです。<br>
+        これから使うパスワードを決めてください。
+      </div>
+      <label>新しいパスワード（6文字以上）</label>
+      <input id="np1" type="password" autocomplete="new-password" style="margin-bottom:12px">
+      <label>もう一度入力</label>
+      <input id="np2" type="password" autocomplete="new-password" style="margin-bottom:16px">
+      <button class="btn" id="sbtn">パスワードを設定してはじめる</button>
+      <button class="btn sub" id="cbtn" style="margin-top:8px">もどる</button>
+    </div>
+
     <div class="err" id="lerr"></div>
   </div>
 </div>
@@ -122,6 +148,7 @@
 </div>
 
 <script>
+const PRESET_PRODUCTS = [{"id": "p001", "customer": "道の駅１８２", "item": "牛乳", "price": 714}, {"id": "p002", "customer": "道の駅１８２", "item": "TG", "price": 1500}, {"id": "p003", "customer": "れいこう堂", "item": "牛乳９００", "price": 640}, {"id": "p004", "customer": "れいこう堂", "item": "牛乳２００", "price": 200}, {"id": "p005", "customer": "れいこう堂", "item": "飲むヨーグルト850", "price": 784}, {"id": "p006", "customer": "れいこう堂", "item": "飲むヨーグルト200", "price": 240}, {"id": "p007", "customer": "れいこう堂", "item": "ヨーグルト", "price": 560}, {"id": "p008", "customer": "IKO", "item": "牛乳", "price": 560}, {"id": "p009", "customer": "IKO", "item": "飲むヨーグルト", "price": 210}, {"id": "p010", "customer": "IKO", "item": "ヨーグルト", "price": 490}, {"id": "p011", "customer": "IKO", "item": "プリン", "price": 266}, {"id": "p012", "customer": "IKO", "item": "ソフトミックス", "price": 1600}, {"id": "p013", "customer": "TLB", "item": "牛乳", "price": 350}, {"id": "p014", "customer": "TLB", "item": "容器", "price": 500}, {"id": "p015", "customer": "【U2】ヤードカフェ", "item": "牛乳", "price": 350}, {"id": "p016", "customer": "【U2】ヤードカフェ", "item": "容器", "price": 1000}, {"id": "p017", "customer": "【U2】ヤードカフェ", "item": "ヨーグルト", "price": 560}, {"id": "p018", "customer": "【U2】フードショップ", "item": "牛乳９００", "price": 640}, {"id": "p019", "customer": "【U2】フードショップ", "item": "牛乳２００", "price": 200}, {"id": "p020", "customer": "【U2】フードショップ", "item": "飲むヨーグルト", "price": 240}, {"id": "p021", "customer": "【U2】フードショップ", "item": "ヨーグルト", "price": 560}, {"id": "p022", "customer": "【U2】アイスクリーム事業部", "item": "牛乳", "price": 350}, {"id": "p023", "customer": "【U2】アイスクリーム事業部", "item": "容器", "price": 1000}, {"id": "p024", "customer": "【U2】アイスクリーム事業部", "item": "ソフトミックス", "price": 1600}, {"id": "p025", "customer": "ガンツウ", "item": "ヨーグルト", "price": 560}, {"id": "p026", "customer": "ガンツウ", "item": "送料", "price": 1000}, {"id": "p027", "customer": "やまと酵素", "item": "牛乳９００", "price": 640}, {"id": "p028", "customer": "やまと酵素", "item": "牛乳２００", "price": 200}, {"id": "p029", "customer": "やまと酵素", "item": "飲むヨーグルト８５０", "price": 784}, {"id": "p030", "customer": "やまと酵素", "item": "飲むヨーグルト２００", "price": 240}, {"id": "p031", "customer": "やまと酵素", "item": "ヨーグルト", "price": 560}, {"id": "p032", "customer": "やまと酵素", "item": "プリン", "price": 304}, {"id": "p033", "customer": "やまと酵素", "item": "送料", "price": 1000}, {"id": "p034", "customer": "白バラ", "item": "牛乳", "price": 500}, {"id": "p035", "customer": "白バラ", "item": "容器", "price": 500}, {"id": "p036", "customer": "京都宇治金時や", "item": "牛乳", "price": 640}, {"id": "p037", "customer": "京都宇治金時や", "item": "送料", "price": 1500}, {"id": "p038", "customer": "Arbor Onomichi", "item": "ヨーグルト", "price": 560}, {"id": "p039", "customer": "マサーント", "item": "牛乳２００", "price": 200}, {"id": "p040", "customer": "マサーント", "item": "飲むヨーグルト２００", "price": 240}, {"id": "p041", "customer": "マサーント", "item": "プリン", "price": 304}, {"id": "p042", "customer": "焼肉神石", "item": "牛乳２００", "price": 200}, {"id": "p043", "customer": "焼肉神石", "item": "飲むヨーグルト２００", "price": 240}, {"id": "p044", "customer": "焼肉神石", "item": "プリン", "price": 304}, {"id": "p045", "customer": "焼肉神石", "item": "送料", "price": 1500}, {"id": "p046", "customer": "Cambio Corsa", "item": "牛乳900", "price": 640}, {"id": "p047", "customer": "Cambio Corsa", "item": "ヨーグルト", "price": 560}, {"id": "p048", "customer": "Cambio Corsa", "item": "送料", "price": 1500}];
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbyr7svzKdsCLHRDq5fkH6a9ZUql0a1BG5nDxsrjfeuIgoE12BWhoOI4LGahpgWxFxRQTA/exec';
 
 const LS = {
@@ -152,35 +179,72 @@ async function apiPost(payload){
 
 // ── ログイン ──
 document.getElementById('lbtn').onclick = doLogin;
+document.getElementById('sbtn').onclick = doSetup;
+document.getElementById('cbtn').onclick = ()=>{ showStep('login'); };
 document.getElementById('lp').addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); });
+document.getElementById('np2').addEventListener('keydown',e=>{ if(e.key==='Enter') doSetup(); });
+
+function showStep(which){
+  document.getElementById('stepLogin').style.display = which==='login'?'block':'none';
+  document.getElementById('stepSetup').style.display = which==='setup'?'block':'none';
+  document.getElementById('lerr').style.display='none';
+}
+function showErr(msg){
+  const e=document.getElementById('lerr'); e.textContent=msg; e.style.display='block';
+}
 
 async function doLogin(){
   const u=document.getElementById('lu').value.trim();
   const p=document.getElementById('lp').value;
-  const err=document.getElementById('lerr');
   const btn=document.getElementById('lbtn');
-  if(!u||!p){ err.textContent='ユーザー名とパスワードを入力してください。'; err.style.display='block'; return; }
-  btn.textContent='確認中…'; btn.disabled=true; err.style.display='none';
+  if(!u||!p){ showErr('ユーザー名とパスワードを入力してください。'); return; }
+  btn.textContent='確認中…'; btn.disabled=true;
   S.user=u; S.pw=p;
   try{
     const d = await apiLoad();
     if(d && d.ok){
       LS.set('auth',{u,p});
-      S.products=d.products&&d.products.length?d.products:[];
-      S.records=d.records||[]; S.payments=d.payments||{}; S.mode='live';
+      S.products=d.products||[]; S.records=d.records||[]; S.payments=d.payments||{};
       showApp();
+    }else if(d && d.error==='setup'){
+      document.getElementById('setupWho').textContent=u;
+      showStep('setup');
+    }else if(d && d.error==='nouser'){
+      showErr('そのユーザー名は登録されていません。管理者にご確認ください。');
     }else{
-      err.textContent='ユーザー名またはパスワードが違います。'; err.style.display='block';
+      showErr('パスワードが違います。');
     }
-  }catch(e){
-    err.textContent='接続できませんでした。通信環境をご確認ください。'; err.style.display='block';
-  }
+  }catch(e){ showErr('接続できませんでした。通信環境をご確認ください。'); }
   btn.textContent='ログイン'; btn.disabled=false;
 }
 
-document.getElementById('logout').onclick = ()=>{
-  LS.del('auth'); location.reload();
-};
+async function doSetup(){
+  const a=document.getElementById('np1').value, b=document.getElementById('np2').value;
+  const btn=document.getElementById('sbtn');
+  if(a.length<6){ showErr('パスワードは6文字以上にしてください。'); return; }
+  if(a!==b){ showErr('2つのパスワードが一致しません。'); return; }
+  btn.textContent='設定中…'; btn.disabled=true;
+  try{
+    const r=await fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({action:'setupPassword',user:S.user,newPw:a})});
+    const d=await r.json();
+    if(d && d.ok){
+      S.pw=a;
+      const d2=await apiLoad();
+      if(d2 && d2.ok){
+        LS.set('auth',{u:S.user,p:a});
+        S.products=d2.products||[]; S.records=d2.records||[]; S.payments=d2.payments||{};
+        showApp();
+      }else showErr('設定はできましたが、読み込みに失敗しました。もう一度ログインしてください。');
+    }else if(d && d.error==='already'){
+      showErr('このユーザーはすでにパスワードが設定されています。');
+      showStep('login');
+    }else showErr('設定できませんでした。もう一度お試しください。');
+  }catch(e){ showErr('接続できませんでした。'); }
+  btn.textContent='パスワードを設定してはじめる'; btn.disabled=false;
+}
+
+document.getElementById('logout').onclick = ()=>{ LS.del('auth'); location.reload(); };
 
 function showApp(){
   document.getElementById('login').style.display='none';
@@ -352,90 +416,109 @@ function docLines(cust,month,byDate){
   return Object.values(map).map(x=>({...x,total:x.qty*x.price}));
 }
 
+function taxRate(item){ return /送料|容器/.test(item) ? 0.10 : 0.08; }
+function pad2(n){ return String(n).padStart(2,'0'); }
+function nowLocal(){ const d=new Date();
+  return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}T${pad2(d.getHours())}:${pad2(d.getMinutes())}`; }
+
 function vDocs(m){
   const custs=[...new Set(S.products.map(p=>p.customer))];
   const cust=S._dc||custs[0]||'';
   const month=S._dm||today().slice(0,7);
   const kind=S._dk||'請求書';
-  const isInv = kind==='請求書';
-  const lines = docLines(cust,month,!isInv);
-  const sub=lines.reduce((s,x)=>s+x.total,0);
-  const tax=Math.floor(sub*0.08);
-  const total=sub+tax;
-  const [yy,mm]=month.split('-');
-  const lastDay=new Date(+yy,+mm,0).getDate();
-  const issue=`${yy}-${mm}-${String(lastDay).padStart(2,'0')}`;
-  const dueD=new Date(+yy,+mm,lastDay); // 翌月末
-  const due=`${dueD.getFullYear()}-${String(dueD.getMonth()+1).padStart(2,'0')}-${String(new Date(dueD.getFullYear(),dueD.getMonth()+1,0).getDate()).padStart(2,'0')}`;
-  const docNo=`${yy}${mm}-${(custs.indexOf(cust)+1+'').padStart(3,'0')}`;
+  const isInv=kind==='請求書';
+  const lines=docLines(cust,month,!isInv).map(l=>Object.assign({},l,{rate:taxRate(l.item)}));
+
+  const dtStr=S._dt||nowLocal();
+  const dt=new Date(dtStr);
+  const docNo=`${dt.getFullYear()}${pad2(dt.getMonth()+1)}${pad2(dt.getDate())}${pad2(dt.getHours())}${pad2(dt.getMinutes())}`;
+  const issueTxt=`${dt.getFullYear()}年${dt.getMonth()+1}月${dt.getDate()}日 ${pad2(dt.getHours())}:${pad2(dt.getMinutes())}`;
+
+  const sub8=lines.filter(l=>l.rate===0.08).reduce((s,x)=>s+x.total,0);
+  const sub10=lines.filter(l=>l.rate===0.10).reduce((s,x)=>s+x.total,0);
+  const tax8=Math.floor(sub8*0.08), tax10=Math.floor(sub10*0.10);
+  const total=sub8+tax8+sub10+tax10;
+
+  const [yy,mm]=month.split('-').map(Number);
+  const dueD=new Date(yy,mm+1,0);
+  const dueTxt=`${dueD.getFullYear()}年${dueD.getMonth()+1}月${dueD.getDate()}日`;
 
   let h=`<div class="card no-print"><h3>帳票を作成</h3>
     <label>種類</label><div class="seg">${['納品書','請求書'].map(k=>`<button class="${kind===k?'on':''}" data-k="${k}">${k}</button>`).join('')}</div>
     <label>販売先</label><select id="dc" style="margin-bottom:12px">${custs.map(c=>`<option ${c===cust?'selected':''}>${c}</option>`).join('')}</select>
     <label>対象月</label><input type="month" id="dm" value="${month}" style="margin-bottom:12px">
-    <button class="btn" id="pr">印刷 / PDFで保存</button>
-    <div class="note">印刷画面で「PDFに保存」を選ぶとPDFになります。</div></div>`;
+    <label>発行日時（${isInv?'請求書':'納品書'}番号のもとになります）</label>
+    <input type="datetime-local" id="dt" value="${dtStr}" style="margin-bottom:12px">
+    <button class="btn" id="pr">PDFで保存 / 印刷</button>
+    <div class="note">印刷画面で「送信先」を「PDFに保存」にするとPDFになります。</div></div>`;
 
   h+=`<div class="card"><div class="sheet">
-    <div class="dtitle">${kind}</div><div class="drule"></div>
+    <div class="dtitle">${kind}</div>
+    <div class="hdr"><table>
+      <tr><td class="k">発行日時</td><td class="v">${issueTxt}</td></tr>
+      <tr><td class="k">${kind}番号</td><td class="v">${docNo}</td></tr>
+    </table></div>
     <div class="meta">
       <div class="to">
         <div class="nm">${cust}　御中</div>
-        <div class="sub">
-          ${isInv?`件名：${jpMonth(month)}分 乳製品代`:`${jpMonth(month)}分として、下記のとおり納品いたしました。`}<br>
-          ${kind}番号：${docNo}
-        </div>
+        <div class="sbj">${isInv?`件名：${jpMonth(month)}分　乳製品代`:`${jpMonth(month)}分として、下記のとおり納品いたしました。`}</div>
       </div>
       <div class="from">
-        発行日：${jpDate(issue)}<br>
         <span class="co">株式会社相馬牧場</span><br>
-        広島県神石郡神石高原町油木乙6673番地<br>
-        TEL：〔　　　　　　　〕<br>
+        〒720-1812<br>
+        広島県神石郡神石高原町油木乙6673<br>
+        TEL：0847-22-0022<br>
         登録番号：T〔　　　　　　　　　　　〕
-        <div class="seal">印</div>
       </div>
     </div>`;
 
   if(isInv){
-    h+=`<div class="grand"><span class="lbl">ご請求金額</span><span class="amt">${yen(total)}</span></div>
-        <div class="lead">下記のとおりご請求申し上げます。お支払期限：${jpDate(due)}</div>`;
+    h+=`<div class="grand"><div class="lbl">ご請求金額（税込）</div><div class="amt">${yen(total)}</div></div>
+        <div class="due"><span>お支払期限：${dueTxt}</span><span>下記のとおりご請求申し上げます。</span></div>`;
   }
 
   if(!lines.length){
-    h+=`<div style="padding:26px 0;text-align:center;color:#777;font-size:13px">この月・この販売先の記録がありません。</div>`;
+    h+=`<div style="padding:30px 0;text-align:center;color:#777;font-size:12px">この月・この販売先の記録がありません。</div>`;
   }else{
     h+=`<table class="items"><thead><tr>
-      ${isInv?'':'<th style="width:78px">納品日</th>'}
-      <th>品名</th><th style="width:64px">数量</th><th style="width:82px">単価</th><th style="width:96px">金額</th></tr></thead><tbody>`;
+      ${isInv?'':'<th style="width:74px">納品日</th>'}
+      <th>品名</th><th style="width:56px">数量</th><th style="width:74px">単価</th>
+      <th style="width:92px">金額</th><th style="width:50px">税率</th></tr></thead><tbody>`;
     lines.forEach(l=>{
       h+=`<tr>${isInv?'':`<td class="c">${l.date.slice(5).replace('-','/')}</td>`}
-        <td>${l.item}</td><td class="n">${num(l.qty)}</td><td class="n">${num(l.price)}</td><td class="n">${num(l.total)}</td></tr>`;
+        <td>${l.item}${l.rate===0.08?' ※':''}</td><td class="n">${num(l.qty)}</td>
+        <td class="n">${num(l.price)}</td><td class="n">${num(l.total)}</td>
+        <td class="c">${l.rate===0.08?'8%':'10%'}</td></tr>`;
     });
-    const blanks=Math.max(0,4-lines.length);
-    for(let i=0;i<blanks;i++) h+=`<tr class="blank"><td colspan="${isInv?4:5}"></td></tr>`;
+    const blanks=Math.max(0,3-lines.length);
+    for(let i=0;i<blanks;i++) h+=`<tr class="blank"><td colspan="${isInv?5:6}"></td></tr>`;
     h+=`</tbody></table>
-      <div class="sumbox">
-        <div><span>小計（税抜）</span><span>${yen(sub)}</span></div>
-        <div><span>消費税（軽減8%）</span><span>${yen(tax)}</span></div>
-        <div class="fin"><span>${isInv?'ご請求金額':'合計金額'}</span><span>${yen(total)}</span></div>
-      </div>`;
+      <table class="sum">
+        <tr><td class="k">8%対象　小計（税抜）</td><td class="v">${yen(sub8)}</td></tr>
+        <tr><td class="k">　　　　消費税（8%）</td><td class="v">${yen(tax8)}</td></tr>
+        <tr><td class="k">10%対象 小計（税抜）</td><td class="v">${yen(sub10)}</td></tr>
+        <tr><td class="k">　　　　消費税（10%）</td><td class="v">${yen(tax10)}</td></tr>
+        <tr class="fin"><td class="k">${isInv?'ご請求金額（税込）':'合計金額（税込）'}</td><td class="v">${yen(total)}</td></tr>
+      </table>`;
   }
 
   if(isInv){
     h+=`<div class="bank"><b>お振込先</b><br>
-      〔金融機関〕　〔支店名〕<br>
-      普通　〔口座番号〕<br>
+      金融機関：GMOあおぞらネット銀行　　支店：法人第二営業部(102)<br>
+      預金種別：普通　　口座番号：2525103<br>
       口座名義：カ）ソウマボクジョウ<br>
       ※ 振込手数料は貴社にてご負担願います。</div>`;
   }
-  h+=`<div class="rem">※ 本${kind}の記載は軽減税率（8%）対象の飲食料品です。<br>
-      ※ ご不明な点は上記連絡先までお問い合わせください。</div>`;
+  h+=`<div class="memo"><b>備考</b></div>`;
+  h+=`<div class="rem">※ 「※」印は軽減税率（8%）対象の飲食料品です。<br>
+      ※ 消費税は税率ごとに区分して計算し、端数は切捨てとしています。</div>`;
   h+=`</div></div>`;
   m.innerHTML=h;
 
   m.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{S._dk=b.dataset.k;render();});
   document.getElementById('dc').onchange=e=>{S._dc=e.target.value;render();};
   document.getElementById('dm').onchange=e=>{S._dm=e.target.value;render();};
+  document.getElementById('dt').onchange=e=>{S._dt=e.target.value;render();};
   document.getElementById('pr').onclick=()=>window.print();
 }
 
@@ -446,11 +529,15 @@ function vPay(m){
   h+=`<div class="card"><table><thead><tr><th>販売先</th><th class="right">請求額</th><th class="center">状況</th></tr></thead><tbody>`;
   let any=false;
   custs.forEach(c=>{
-    const l=docLines(c,month,false); const sub=l.reduce((s,x)=>s+x.total,0);
+    const l=docLines(c,month,false).map(x=>Object.assign({},x,{rate:taxRate(x.item)}));
+    const s8=l.filter(x=>x.rate===0.08).reduce((a,x)=>a+x.total,0);
+    const s10=l.filter(x=>x.rate===0.10).reduce((a,x)=>a+x.total,0);
+    const sub=s8+s10;
+    const billed=s8+Math.floor(s8*0.08)+s10+Math.floor(s10*0.10);
     if(!sub) return; any=true;
     const key=c+'|'+month; const st=S.payments[key]?.status||'未入金';
     const paid=st==='入金済';
-    h+=`<tr><td>${c}</td><td class="right">${yen(sub+Math.floor(sub*0.08))}</td>
+    h+=`<tr><td>${c}</td><td class="right">${yen(billed)}</td>
       <td class="center"><button data-key="${key}" data-next="${paid?'未入金':'入金済'}"
       style="border:1px solid ${paid?'var(--accent)':'var(--line)'};background:${paid?'var(--accent)':'var(--card)'};
       color:${paid?'#fff':'var(--sub)'};border-radius:14px;padding:4px 12px;font-size:12px;font-weight:700;cursor:pointer">
@@ -483,6 +570,13 @@ function vSettings(m){
     <label>商品名</label><input id="ni" placeholder="例：牛乳" style="margin-bottom:8px">
     <label>単価（円／点）</label><input id="np" type="number" placeholder="例：270" style="margin-bottom:12px">
     <button class="btn" id="add">追加する</button></div>`;
+  h+=`<div class="card"><h3>商品マスタの一括登録</h3>
+    <div class="note" style="margin-top:0;margin-bottom:12px">単価一覧（15取引先・48商品）をまとめて登録します。<b style="color:var(--danger)">現在の商品マスタは上書きされます。</b></div>
+    <button class="btn sub" id="imp">一括登録する（48件）</button></div>`;
+  h+=`<div class="card"><h3>パスワードの変更</h3>
+    <label>新しいパスワード（6文字以上）</label><input id="cp1" type="password" style="margin-bottom:8px">
+    <label>もう一度入力</label><input id="cp2" type="password" style="margin-bottom:12px">
+    <button class="btn sub" id="chg">パスワードを変更する</button></div>`;
   h+=`<div class="card"><h3>データの再読み込み</h3>
     <div class="note" style="margin-top:0;margin-bottom:12px">他の端末で入力した内容を取り込みます。</div>
     <button class="btn sub" id="rl">最新の内容を読み込む</button></div>`;
@@ -495,6 +589,19 @@ function vSettings(m){
     saveProducts([...S.products,{id:uid(),customer:c.trim(),item:i.trim(),price:Number(p)||0}]);
   };
   document.getElementById('rl').onclick=async()=>{ await reload(); render(); alert('読み込みました'); };
+  document.getElementById('imp').onclick=async()=>{
+    if(!confirm('現在の商品マスタを削除して、48件を登録します。よろしいですか？')) return;
+    await saveProducts(PRESET_PRODUCTS.map(p=>Object.assign({},p)));
+    alert('48件を登録しました。');
+  };
+  document.getElementById('chg').onclick=async()=>{
+    const a=document.getElementById('cp1').value, b=document.getElementById('cp2').value;
+    if(a.length<6){ alert('パスワードは6文字以上にしてください。'); return; }
+    if(a!==b){ alert('2つのパスワードが一致しません。'); return; }
+    const d=await apiPost({action:'changePassword',newPw:a});
+    if(d && d.ok){ S.pw=a; LS.set('auth',{u:S.user,p:a}); alert('変更しました。'); render(); }
+    else alert('変更できませんでした。');
+  };
 }
 </script>
 </body>
