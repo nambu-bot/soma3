@@ -116,6 +116,12 @@
       <label>パスワード</label>
       <input id="lp" type="password" autocomplete="current-password" style="margin-bottom:16px">
       <button class="btn" id="lbtn">ログイン</button>
+      <div style="text-align:center;margin-top:14px">
+        <a id="goSetup" href="#" style="font-size:13px;color:var(--accent);font-weight:700">初回ログインの方はこちら</a>
+      </div>
+      <div style="text-align:center;margin-top:10px;font-size:11px;color:var(--sub)">
+        パスワードをお忘れの場合は、管理者にご連絡ください。
+      </div>
     </div>
 
     <div id="stepSetup" style="display:none">
@@ -181,6 +187,14 @@ async function apiPost(payload){
 document.getElementById('lbtn').onclick = doLogin;
 document.getElementById('sbtn').onclick = doSetup;
 document.getElementById('cbtn').onclick = ()=>{ showStep('login'); };
+document.getElementById('goSetup').onclick = (e)=>{
+  e.preventDefault();
+  const u=document.getElementById('lu').value.trim();
+  if(!u){ showErr('先に上のユーザー名を入力してから押してください。'); return; }
+  S.user=u;
+  document.getElementById('setupWho').textContent=u;
+  showStep('setup');
+};
 document.getElementById('lp').addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); });
 document.getElementById('np2').addEventListener('keydown',e=>{ if(e.key==='Enter') doSetup(); });
 
