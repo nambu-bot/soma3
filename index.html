@@ -89,6 +89,11 @@
   .sheet .bank{margin-top:16px;border:1px solid #999;padding:10px 12px;font-size:11px;line-height:1.9;}
   .sheet .memo{margin-top:12px;border:1px solid #999;padding:8px 12px;font-size:11px;min-height:44px;}
   .sheet .memo b{font-size:11px;}
+  .sheet table.sign{width:100%;border-collapse:collapse;font-size:11px;margin-top:6px;}
+  .sheet table.sign th{background:#e8efec;border:1px solid #999;padding:6px 4px;font-weight:700;text-align:center;}
+  .sheet table.sign td{border:1px solid #999;height:58px;vertical-align:middle;}
+  .sheet table.sign td.c{text-align:center;}
+  .sheet .signttl{font-size:11px;font-weight:700;margin-top:14px;}
   .sheet .rem{margin-top:12px;font-size:10.5px;color:#444;border-top:1px dashed #bbb;padding-top:8px;line-height:1.7;}
 
   @media print{
@@ -154,7 +159,7 @@
 </div>
 
 <script>
-const PRESET_PRODUCTS = [{"id": "p001", "customer": "道の駅１８２", "item": "牛乳", "price": 714}, {"id": "p002", "customer": "道の駅１８２", "item": "TG", "price": 1500}, {"id": "p003", "customer": "れいこう堂", "item": "牛乳９００", "price": 640}, {"id": "p004", "customer": "れいこう堂", "item": "牛乳２００", "price": 200}, {"id": "p005", "customer": "れいこう堂", "item": "飲むヨーグルト850", "price": 784}, {"id": "p006", "customer": "れいこう堂", "item": "飲むヨーグルト200", "price": 240}, {"id": "p007", "customer": "れいこう堂", "item": "ヨーグルト", "price": 560}, {"id": "p008", "customer": "IKO", "item": "牛乳", "price": 560}, {"id": "p009", "customer": "IKO", "item": "飲むヨーグルト", "price": 210}, {"id": "p010", "customer": "IKO", "item": "ヨーグルト", "price": 490}, {"id": "p011", "customer": "IKO", "item": "プリン", "price": 266}, {"id": "p012", "customer": "IKO", "item": "ソフトミックス", "price": 1600}, {"id": "p013", "customer": "TLB", "item": "牛乳", "price": 350}, {"id": "p014", "customer": "TLB", "item": "容器", "price": 500}, {"id": "p015", "customer": "【U2】ヤードカフェ", "item": "牛乳", "price": 350}, {"id": "p016", "customer": "【U2】ヤードカフェ", "item": "容器", "price": 1000}, {"id": "p017", "customer": "【U2】ヤードカフェ", "item": "ヨーグルト", "price": 560}, {"id": "p018", "customer": "【U2】フードショップ", "item": "牛乳９００", "price": 640}, {"id": "p019", "customer": "【U2】フードショップ", "item": "牛乳２００", "price": 200}, {"id": "p020", "customer": "【U2】フードショップ", "item": "飲むヨーグルト", "price": 240}, {"id": "p021", "customer": "【U2】フードショップ", "item": "ヨーグルト", "price": 560}, {"id": "p022", "customer": "【U2】アイスクリーム事業部", "item": "牛乳", "price": 350}, {"id": "p023", "customer": "【U2】アイスクリーム事業部", "item": "容器", "price": 1000}, {"id": "p024", "customer": "【U2】アイスクリーム事業部", "item": "ソフトミックス", "price": 1600}, {"id": "p025", "customer": "ガンツウ", "item": "ヨーグルト", "price": 560}, {"id": "p026", "customer": "ガンツウ", "item": "送料", "price": 1000}, {"id": "p027", "customer": "やまと酵素", "item": "牛乳９００", "price": 640}, {"id": "p028", "customer": "やまと酵素", "item": "牛乳２００", "price": 200}, {"id": "p029", "customer": "やまと酵素", "item": "飲むヨーグルト８５０", "price": 784}, {"id": "p030", "customer": "やまと酵素", "item": "飲むヨーグルト２００", "price": 240}, {"id": "p031", "customer": "やまと酵素", "item": "ヨーグルト", "price": 560}, {"id": "p032", "customer": "やまと酵素", "item": "プリン", "price": 304}, {"id": "p033", "customer": "やまと酵素", "item": "送料", "price": 1000}, {"id": "p034", "customer": "白バラ", "item": "牛乳", "price": 500}, {"id": "p035", "customer": "白バラ", "item": "容器", "price": 500}, {"id": "p036", "customer": "京都宇治金時や", "item": "牛乳", "price": 640}, {"id": "p037", "customer": "京都宇治金時や", "item": "送料", "price": 1500}, {"id": "p038", "customer": "Arbor Onomichi", "item": "ヨーグルト", "price": 560}, {"id": "p039", "customer": "マサーント", "item": "牛乳２００", "price": 200}, {"id": "p040", "customer": "マサーント", "item": "飲むヨーグルト２００", "price": 240}, {"id": "p041", "customer": "マサーント", "item": "プリン", "price": 304}, {"id": "p042", "customer": "焼肉神石", "item": "牛乳２００", "price": 200}, {"id": "p043", "customer": "焼肉神石", "item": "飲むヨーグルト２００", "price": 240}, {"id": "p044", "customer": "焼肉神石", "item": "プリン", "price": 304}, {"id": "p045", "customer": "焼肉神石", "item": "送料", "price": 1500}, {"id": "p046", "customer": "Cambio Corsa", "item": "牛乳900", "price": 640}, {"id": "p047", "customer": "Cambio Corsa", "item": "ヨーグルト", "price": 560}, {"id": "p048", "customer": "Cambio Corsa", "item": "送料", "price": 1500}];
+const PRESET_PRODUCTS = [{"id": "p001", "customer": "道の駅182ステーション", "item": "TG", "price": 1500}, {"id": "p002", "customer": "道の駅182ステーション", "item": "ヨーグルト", "price": 590}, {"id": "p003", "customer": "道の駅182ステーション", "item": "牛乳 200ml", "price": 196}, {"id": "p004", "customer": "道の駅182ステーション", "item": "牛乳 900ml", "price": 661}, {"id": "p005", "customer": "道の駅182ステーション", "item": "飲むヨーグルト 200ml", "price": 251}, {"id": "p006", "customer": "道の駅182ステーション", "item": "飲むヨーグルト 900ml", "price": 771}, {"id": "p007", "customer": "道の駅182ステーション", "item": "【廃棄】ヨーグルト", "price": -226}, {"id": "p008", "customer": "道の駅182ステーション", "item": "【廃棄】牛乳 200ml", "price": -97}, {"id": "p009", "customer": "道の駅182ステーション", "item": "【廃棄】牛乳 900ml", "price": -351}, {"id": "p010", "customer": "道の駅182ステーション", "item": "【廃棄】飲むヨーグルト 200ml", "price": -105}, {"id": "p011", "customer": "道の駅182ステーション", "item": "【廃棄】飲むヨーグルト 900ml", "price": -345}, {"id": "p012", "customer": "道の駅182（カフェ）", "item": "牛乳 900ml", "price": 714}, {"id": "p013", "customer": "れいこう堂", "item": "牛乳９００", "price": 640}, {"id": "p014", "customer": "れいこう堂", "item": "牛乳２００", "price": 200}, {"id": "p015", "customer": "れいこう堂", "item": "飲むヨーグルト850", "price": 784}, {"id": "p016", "customer": "れいこう堂", "item": "飲むヨーグルト200", "price": 240}, {"id": "p017", "customer": "れいこう堂", "item": "ヨーグルト", "price": 560}, {"id": "p018", "customer": "IKO", "item": "牛乳", "price": 560}, {"id": "p019", "customer": "IKO", "item": "飲むヨーグルト", "price": 210}, {"id": "p020", "customer": "IKO", "item": "ヨーグルト", "price": 490}, {"id": "p021", "customer": "IKO", "item": "プリン", "price": 266}, {"id": "p022", "customer": "IKO", "item": "ソフトミックス", "price": 1600}, {"id": "p023", "customer": "LOG", "item": "牛乳", "price": 350}, {"id": "p024", "customer": "LOG", "item": "容器", "price": 500}, {"id": "p025", "customer": "【U2】ヤードカフェ", "item": "牛乳", "price": 350}, {"id": "p026", "customer": "【U2】ヤードカフェ", "item": "容器", "price": 1000}, {"id": "p027", "customer": "【U2】ヤードカフェ", "item": "ヨーグルト", "price": 560}, {"id": "p028", "customer": "【U2】フードショップ", "item": "牛乳９００", "price": 640}, {"id": "p029", "customer": "【U2】フードショップ", "item": "牛乳２００", "price": 200}, {"id": "p030", "customer": "【U2】フードショップ", "item": "飲むヨーグルト", "price": 240}, {"id": "p031", "customer": "【U2】フードショップ", "item": "ヨーグルト", "price": 560}, {"id": "p032", "customer": "【U2】アイスクリーム事業部", "item": "牛乳", "price": 350}, {"id": "p033", "customer": "【U2】アイスクリーム事業部", "item": "容器", "price": 1000}, {"id": "p034", "customer": "【U2】アイスクリーム事業部", "item": "ソフトミックス", "price": 1600}, {"id": "p035", "customer": "ガンツウ", "item": "ヨーグルト", "price": 560}, {"id": "p036", "customer": "ガンツウ", "item": "送料", "price": 1000}, {"id": "p037", "customer": "やまと酵素", "item": "牛乳９００", "price": 640}, {"id": "p038", "customer": "やまと酵素", "item": "牛乳２００", "price": 200}, {"id": "p039", "customer": "やまと酵素", "item": "飲むヨーグルト８５０", "price": 784}, {"id": "p040", "customer": "やまと酵素", "item": "飲むヨーグルト２００", "price": 240}, {"id": "p041", "customer": "やまと酵素", "item": "ヨーグルト", "price": 560}, {"id": "p042", "customer": "やまと酵素", "item": "プリン", "price": 304}, {"id": "p043", "customer": "やまと酵素", "item": "送料", "price": 1000}, {"id": "p044", "customer": "白バラ", "item": "牛乳", "price": 500}, {"id": "p045", "customer": "白バラ", "item": "容器", "price": 500}, {"id": "p046", "customer": "京都宇治金時や", "item": "牛乳", "price": 640}, {"id": "p047", "customer": "京都宇治金時や", "item": "送料", "price": 1500}, {"id": "p048", "customer": "Arbor Onomichi", "item": "ヨーグルト", "price": 560}, {"id": "p049", "customer": "マサーント", "item": "牛乳２００", "price": 200}, {"id": "p050", "customer": "マサーント", "item": "飲むヨーグルト２００", "price": 240}, {"id": "p051", "customer": "マサーント", "item": "プリン", "price": 304}, {"id": "p052", "customer": "焼肉神石", "item": "牛乳２００", "price": 200}, {"id": "p053", "customer": "焼肉神石", "item": "飲むヨーグルト２００", "price": 240}, {"id": "p054", "customer": "焼肉神石", "item": "プリン", "price": 304}, {"id": "p055", "customer": "焼肉神石", "item": "送料", "price": 1500}, {"id": "p056", "customer": "Cambio Corsa", "item": "牛乳900", "price": 640}, {"id": "p057", "customer": "Cambio Corsa", "item": "ヨーグルト", "price": 560}, {"id": "p058", "customer": "Cambio Corsa", "item": "送料", "price": 1500}, {"id": "p059", "customer": "ふくふく市", "item": "牛乳 200ml", "price": 200}, {"id": "p060", "customer": "ふくふく市", "item": "飲むヨーグルト 200ml", "price": 237}, {"id": "p061", "customer": "ふくふく市", "item": "ヨーグルト", "price": 555}, {"id": "p062", "customer": "ふくふく市", "item": "牛乳 900ml", "price": 629}, {"id": "p063", "customer": "ふくふく市", "item": "【廃棄】牛乳 200ml", "price": -97}, {"id": "p064", "customer": "ふくふく市", "item": "【廃棄】飲むヨーグルト 200ml", "price": -105}, {"id": "p065", "customer": "ふくふく市", "item": "【廃棄】ヨーグルト", "price": -226}, {"id": "p066", "customer": "ふくふく市", "item": "【廃棄】牛乳 900ml", "price": -351}];
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbzIpjIP0iiy-gYLI6CFeVAczYSTG2vOo0GnpvklQ2LuN3rCW-qwtMedxVKgUhw_DFVn6w/exec';
 
 const LS = {
@@ -333,6 +338,15 @@ function vInput(m){
   let h=`<div class="card"><h3>日付</h3><input type="date" id="d" value="${date}">${e.date?'<div style="font-size:12px;color:var(--accent);margin-top:6px">この日の記録を編集しています</div>':''}</div>`;
   h+=`<div class="card"><h3>毎日の乳量</h3><div class="row"><input type="number" id="milk" value="${e.milk??''}" placeholder="0"><span style="color:var(--sub)">L</span></div></div>`;
   h+=`<div class="card"><h3>広酪への出荷量</h3><div class="row"><input type="number" id="ship" value="${e.shipGyoraku??''}" placeholder="0"><span style="color:var(--sub)">L</span></div></div>`;
+  h+=`<div class="card"><h3>廃棄した生乳量</h3>
+    <div class="note" style="margin-top:0;margin-bottom:8px">広酪へも出荷できず、廃棄した生乳の量です。</div>
+    <div class="row"><input type="number" id="waste" value="${e.wasteMilk??''}" placeholder="0"><span style="color:var(--sub)">L</span></div></div>`;
+  h+=`<div class="card"><h3>搾乳した頭数</h3>
+    <label>出荷可能頭数</label>
+    <div class="row"><input type="number" id="cowsOk" value="${e.cowsOk??''}" placeholder="0"><span style="color:var(--sub)">頭</span></div>
+    <label style="margin-top:10px">出荷不可頭数</label>
+    <div class="note" style="margin-top:0;margin-bottom:6px">血乳などで商品化できない頭数です。未搾乳の牛は含めません。</div>
+    <div class="row"><input type="number" id="cowsNg" value="${e.cowsNg??''}" placeholder="0"><span style="color:var(--sub)">頭</span></div></div>`;
 
   h+=`<div class="card"><h3>販売数（販売先・商品別）</h3>
     <label>販売先で絞り込む</label>
@@ -375,8 +389,13 @@ function vInput(m){
     document.getElementById('dt').textContent=yen(S.products.reduce((a,pp)=>a+(Number(s2[pp.id])||0)*pp.price,0));
   });
   document.getElementById('sv').onclick=()=>{
-    saveRecord({date,milk:Number(document.getElementById('milk').value)||0,
-      shipGyoraku:Number(document.getElementById('ship').value)||0, sales:S._s||e.sales||{}});
+    saveRecord({date,
+      milk:Number(document.getElementById('milk').value)||0,
+      shipGyoraku:Number(document.getElementById('ship').value)||0,
+      wasteMilk:Number(document.getElementById('waste').value)||0,
+      cowsOk:Number(document.getElementById('cowsOk').value)||0,
+      cowsNg:Number(document.getElementById('cowsNg').value)||0,
+      sales:S._s||e.sales||{}});
     S._s=null; alert('保存しました');
   };
 }
@@ -388,6 +407,13 @@ function periodRecords(){
 function vReport(m){
   const f=periodRecords();
   const milk=f.reduce((s,r)=>s+(r.milk||0),0), ship=f.reduce((s,r)=>s+(r.shipGyoraku||0),0);
+  const waste=f.reduce((s,r)=>s+(r.wasteMilk||0),0);
+  const okSum=f.reduce((s,r)=>s+(r.cowsOk||0),0);
+  const ngSum=f.reduce((s,r)=>s+(r.cowsNg||0),0);
+  const cowDays=okSum+ngSum;
+  const daysWithCows=f.filter(r=>((r.cowsOk||0)+(r.cowsNg||0))>0).length;
+  const perCow=cowDays>0?milk/cowDays:0;
+  const okShow=S.period==='day'?okSum:(daysWithCows>0?okSum/daysWithCows:0);
   const map={};
   f.forEach(r=>S.products.forEach(p=>{const q=Number(r.sales?.[p.id])||0;if(!q)return;
     if(!map[p.id])map[p.id]={customer:p.customer,item:p.item,price:p.price,qty:0};map[p.id].qty+=q;}));
@@ -397,9 +423,15 @@ function vReport(m){
   const iv=S.period==='year'?S.anchor.slice(0,4):S.period==='month'?S.anchor.slice(0,7):S.anchor;
 
   let h=`<div class="card"><div class="seg">${[['day','日別'],['month','月別'],['year','年別']].map(([k,l])=>`<button class="${S.period===k?'on':''}" data-p="${k}">${l}</button>`).join('')}</div><input type="${it}" id="an" value="${iv}"></div>`;
-  h+=`<div class="stats"><div class="stat"><div class="k">乳量</div><div class="v">${num(milk)} L</div></div>
+  h+=`<div class="stats"><div class="stat"><div class="k">生乳量</div><div class="v">${num(milk)} L</div></div>
    <div class="stat"><div class="k">広酪出荷</div><div class="v">${num(ship)} L</div></div>
    <div class="stat accent"><div class="k">売上合計</div><div class="v">${yen(grand)}</div></div></div>`;
+  h+=`<div class="stats"><div class="stat"><div class="k">廃棄生乳量</div><div class="v">${num(waste)} L</div></div>
+   <div class="stat"><div class="k">1頭あたり生乳量${S.period==='day'?'':'（平均）'}</div><div class="v">${perCow?perCow.toFixed(1):'—'} L</div></div>
+   <div class="stat"><div class="k">出荷可能頭数${S.period==='day'?'':'（平均）'}</div><div class="v">${okShow?(S.period==='day'?num(okShow):okShow.toFixed(1)):'—'} 頭</div></div></div>`;
+  if(cowDays>0){
+    h+=`<div class="note" style="margin:-4px 0 14px">1頭あたり生乳量＝生乳量 ÷ 搾乳頭数（出荷可能＋出荷不可）　／　出荷不可 ${S.period==='day'?num(ngSum)+' 頭':'延べ '+num(ngSum)+' 頭'}</div>`;
+  }
   h+=`<div class="card"><h3>販売先・商品別の売上</h3>`;
   if(!rows.length) h+=`<div style="color:var(--sub);font-size:14px;padding:10px 0">この期間の販売記録はまだありません。</div>`;
   else{
@@ -408,6 +440,27 @@ function vReport(m){
     h+=`</tbody><tfoot><tr style="border-top:2px solid var(--accent)"><td colspan="4" style="font-weight:800;padding:8px 4px">全体合計売上</td><td class="right" style="font-weight:800;color:var(--accent);padding:8px 4px">${yen(grand)}</td></tr></tfoot></table>`;
   }
   h+=`</div>`;
+  if(S.period==='month'){
+    const rows2=f.slice().sort((a,b)=>a.date.localeCompare(b.date));
+    h+=`<div class="card"><h3>日別の推移</h3>`;
+    if(!rows2.length) h+=`<div style="color:var(--sub);font-size:13px;padding:8px 0">この月の記録はまだありません。</div>`;
+    else{
+      h+=`<table><thead><tr><th>日付</th><th class="right">生乳量</th><th class="right">廃棄</th>
+        <th class="right">出荷可能</th><th class="right">出荷不可</th><th class="right">1頭あたり</th></tr></thead><tbody>`;
+      rows2.forEach(r=>{
+        const cd=(r.cowsOk||0)+(r.cowsNg||0);
+        const pc=cd>0?((r.milk||0)/cd).toFixed(1):'—';
+        h+=`<tr><td>${r.date.slice(5).replace('-','/')}</td>
+          <td class="right">${num(r.milk||0)}</td>
+          <td class="right" style="${(r.wasteMilk||0)>0?'color:var(--danger);font-weight:700':''}">${num(r.wasteMilk||0)}</td>
+          <td class="right">${num(r.cowsOk||0)}</td>
+          <td class="right" style="${(r.cowsNg||0)>0?'color:var(--danger)':''}">${num(r.cowsNg||0)}</td>
+          <td class="right" style="font-weight:700">${pc}</td></tr>`;
+      });
+      h+=`</tbody></table>`;
+    }
+    h+=`</div>`;
+  }
   m.innerHTML=h;
   m.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{S.period=b.dataset.p;render();});
   document.getElementById('an').onchange=ev=>{const v=ev.target.value;
@@ -430,6 +483,54 @@ function docLines(cust,month,byDate){
   return Object.values(map).map(x=>({...x,total:x.qty*x.price}));
 }
 
+const RENAMES=[
+  {from:{customer:'TLB'},                      to:{customer:'LOG'}},
+  {from:{customer:'TLB（Log）'},               to:{customer:'LOG'}},
+  {from:{customer:'道の駅１８２',item:'TG'},   to:{customer:'道の駅182ステーション',item:'TG'}},
+  {from:{customer:'道の駅１８２',item:'牛乳'}, to:{customer:'道の駅182（カフェ）',item:'牛乳 900ml'}},
+];
+function applyRenames(p){
+  var q={id:p.id,customer:p.customer,item:p.item,price:p.price};
+  RENAMES.forEach(function(r){
+    var okC=(r.from.customer===undefined)||(q.customer===r.from.customer);
+    var okI=(r.from.item===undefined)||(q.item===r.from.item);
+    if(okC&&okI){
+      if(r.to.customer!==undefined) q.customer=r.to.customer;
+      if(r.to.item!==undefined)     q.item=r.to.item;
+    }
+  });
+  return q;
+}
+function mergeProducts(current, preset){
+  var cur=(current||[]).map(function(p){var r=applyRenames(p);return {orig:p,key:r.customer+'|#|'+r.item,ren:r};});
+  var used={}, maxN=0;
+  cur.forEach(function(c){var m=/^p(\d+)$/.exec(c.orig.id||''); if(m) maxN=Math.max(maxN,parseInt(m[1],10));});
+  var out=[], kept=0, added=0;
+  preset.forEach(function(p){
+    var key=p.customer+'|#|'+p.item;
+    var hit=null;
+    for(var i=0;i<cur.length;i++){ if(cur[i].key===key && !used[cur[i].orig.id]){ hit=cur[i]; break; } }
+    if(hit){ used[hit.orig.id]=1; kept++; out.push({id:hit.orig.id,customer:p.customer,item:p.item,price:p.price}); }
+    else { maxN++; added++; out.push({id:'p'+String(maxN).padStart(3,'0'),customer:p.customer,item:p.item,price:p.price}); }
+  });
+  var orphan=0;
+  cur.forEach(function(c){
+    if(used[c.orig.id]) return;
+    orphan++;
+    out.push({id:c.orig.id,customer:c.ren.customer,item:c.ren.item,price:c.orig.price});
+  });
+  return {list:out,kept:kept,added:added,orphan:orphan};
+}
+function docLinesDay(cust,date){
+  const r=S.records.find(x=>x.date===date);
+  if(!r) return [];
+  const out=[];
+  S.products.filter(p=>p.customer===cust).forEach(p=>{
+    const q=Number(r.sales?.[p.id])||0;
+    if(q) out.push({date:r.date,item:p.item,qty:q,price:p.price,total:q*p.price});
+  });
+  return out;
+}
 function taxRate(item){ return /送料|容器/.test(item) ? 0.10 : 0.08; }
 function pad2(n){ return String(n).padStart(2,'0'); }
 function nowLocal(){ const d=new Date();
@@ -441,9 +542,10 @@ function vDocs(m){
   const month=S._dm||today().slice(0,7);
   const kind=S._dk||'請求書';
   const isInv=kind==='請求書';
-  const lines=docLines(cust,month,!isInv).map(l=>Object.assign({},l,{rate:taxRate(l.item)}));
+  const day=S._dd||today();
+  const lines=(isInv?docLines(cust,month,false):docLinesDay(cust,day)).map(l=>Object.assign({},l,{rate:taxRate(l.item)}));
 
-  const dtStr=S._dt||nowLocal();
+  const dtStr=S._dt||(isInv?nowLocal():(day+'T'+nowLocal().slice(11)));
   const dt=new Date(dtStr);
   const docNo=`${dt.getFullYear()}${pad2(dt.getMonth()+1)}${pad2(dt.getDate())}${pad2(dt.getHours())}${pad2(dt.getMinutes())}`;
   const issueTxt=`${dt.getFullYear()}年${dt.getMonth()+1}月${dt.getDate()}日 ${pad2(dt.getHours())}:${pad2(dt.getMinutes())}`;
@@ -460,7 +562,9 @@ function vDocs(m){
   let h=`<div class="card no-print"><h3>帳票を作成</h3>
     <label>種類</label><div class="seg">${['納品書','請求書'].map(k=>`<button class="${kind===k?'on':''}" data-k="${k}">${k}</button>`).join('')}</div>
     <label>販売先</label><select id="dc" style="margin-bottom:12px">${custs.map(c=>`<option ${c===cust?'selected':''}>${c}</option>`).join('')}</select>
-    <label>対象月</label><input type="month" id="dm" value="${month}" style="margin-bottom:12px">
+    ${isInv
+      ? `<label>対象月</label><input type="month" id="dm" value="${month}" style="margin-bottom:12px">`
+      : `<label>納品日</label><input type="date" id="dd" value="${day}" style="margin-bottom:12px">`}
     <label>発行日時（${isInv?'請求書':'納品書'}番号のもとになります）</label>
     <input type="datetime-local" id="dt" value="${dtStr}" style="margin-bottom:12px">
     <button class="btn" id="pr">PDFで保存 / 印刷</button>
@@ -475,7 +579,7 @@ function vDocs(m){
     <div class="meta">
       <div class="to">
         <div class="nm">${cust}　御中</div>
-        <div class="sbj">${isInv?`件名：${jpMonth(month)}分　乳製品代`:`${jpMonth(month)}分として、下記のとおり納品いたしました。`}</div>
+        <div class="sbj">${isInv?`件名：${jpMonth(month)}分　乳製品代`:`${jpDate(day)}分として、下記のとおり納品いたしました。`}</div>
       </div>
       <div class="from">
         <span class="co">株式会社相馬牧場</span><br>
@@ -492,20 +596,20 @@ function vDocs(m){
   }
 
   if(!lines.length){
-    h+=`<div style="padding:30px 0;text-align:center;color:#777;font-size:12px">この月・この販売先の記録がありません。</div>`;
+    h+=`<div style="padding:30px 0;text-align:center;color:#777;font-size:12px">${isInv?'この月':'この日'}・この販売先の記録がありません。</div>`;
   }else{
     h+=`<table class="items"><thead><tr>
-      ${isInv?'':'<th style="width:74px">納品日</th>'}
+      
       <th>品名</th><th style="width:56px">数量</th><th style="width:74px">単価</th>
       <th style="width:92px">金額</th><th style="width:50px">税率</th></tr></thead><tbody>`;
     lines.forEach(l=>{
-      h+=`<tr>${isInv?'':`<td class="c">${l.date.slice(5).replace('-','/')}</td>`}
+      h+=`<tr>
         <td>${l.item}${l.rate===0.08?' ※':''}</td><td class="n">${num(l.qty)}</td>
         <td class="n">${num(l.price)}</td><td class="n">${num(l.total)}</td>
         <td class="c">${l.rate===0.08?'8%':'10%'}</td></tr>`;
     });
     const blanks=Math.max(0,3-lines.length);
-    for(let i=0;i<blanks;i++) h+=`<tr class="blank"><td colspan="${isInv?5:6}"></td></tr>`;
+    for(let i=0;i<blanks;i++) h+=`<tr class="blank"><td colspan="5"></td></tr>`;
     h+=`</tbody></table>
       <table class="sum">
         <tr><td class="k">8%対象　小計（税抜）</td><td class="v">${yen(sub8)}</td></tr>
@@ -524,6 +628,14 @@ function vDocs(m){
       ※ 振込手数料は貴社にてご負担願います。</div>`;
   }
   h+=`<div class="memo"><b>備考</b></div>`;
+  if(!isInv){
+    h+=`<div class="signttl">受領確認欄</div>
+      <table class="sign">
+        <tr><th style="width:34%">受領日</th><th>御署名（または受領印）</th></tr>
+        <tr><td class="c" style="color:#888">　　　年　　月　　日</td><td></td></tr>
+      </table>
+      <div style="font-size:10px;color:#444;margin-top:5px">※ 商品をお受け取りいただきましたら、受領日のご記入と御署名（または受領印）をお願いいたします。</div>`;
+  }
   h+=`<div class="rem">※ 「※」印は軽減税率（8%）対象の飲食料品です。<br>
       ※ 消費税は税率ごとに区分して計算し、端数は切捨てとしています。</div>`;
   h+=`</div></div>`;
@@ -531,7 +643,8 @@ function vDocs(m){
 
   m.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{S._dk=b.dataset.k;render();});
   document.getElementById('dc').onchange=e=>{S._dc=e.target.value;render();};
-  document.getElementById('dm').onchange=e=>{S._dm=e.target.value;render();};
+  const dmEl=document.getElementById('dm'); if(dmEl) dmEl.onchange=e=>{S._dm=e.target.value;render();};
+  const ddEl=document.getElementById('dd'); if(ddEl) ddEl.onchange=e=>{S._dd=e.target.value;render();};
   document.getElementById('dt').onchange=e=>{S._dt=e.target.value;render();};
   document.getElementById('pr').onclick=()=>window.print();
 }
@@ -584,9 +697,9 @@ function vSettings(m){
     <label>商品名</label><input id="ni" placeholder="例：牛乳" style="margin-bottom:8px">
     <label>単価（円／点）</label><input id="np" type="number" placeholder="例：270" style="margin-bottom:12px">
     <button class="btn" id="add">追加する</button></div>`;
-  h+=`<div class="card"><h3>商品マスタの一括登録</h3>
-    <div class="note" style="margin-top:0;margin-bottom:12px">単価一覧（15取引先・48商品）をまとめて登録します。<b style="color:var(--danger)">現在の商品マスタは上書きされます。</b></div>
-    <button class="btn sub" id="imp">一括登録する（48件）</button></div>`;
+  h+=`<div class="card"><h3>商品マスタの更新</h3>
+    <div class="note" style="margin-top:0;margin-bottom:12px">最新の単価一覧（17取引先・66商品）に更新します。<b>入力済みの販売実績はそのまま残ります。</b></div>
+    <button class="btn sub" id="imp">商品マスタを更新する</button></div>`;
   h+=`<div class="card"><h3>パスワードの変更</h3>
     <label>新しいパスワード（6文字以上）</label><input id="cp1" type="password" style="margin-bottom:8px">
     <label>もう一度入力</label><input id="cp2" type="password" style="margin-bottom:12px">
@@ -604,9 +717,10 @@ function vSettings(m){
   };
   document.getElementById('rl').onclick=async()=>{ await reload(); render(); alert('読み込みました'); };
   document.getElementById('imp').onclick=async()=>{
-    if(!confirm('現在の商品マスタを削除して、48件を登録します。よろしいですか？')) return;
-    await saveProducts(PRESET_PRODUCTS.map(p=>Object.assign({},p)));
-    alert('48件を登録しました。');
+    if(!confirm('商品マスタを最新の内容に更新します。入力済みの販売実績はそのまま残ります。よろしいですか？')) return;
+    const r=mergeProducts(S.products, PRESET_PRODUCTS);
+    await saveProducts(r.list);
+    alert('更新しました。 引き継ぎ '+r.kept+'件 ／ 新規追加 '+r.added+'件 ／ 実績保持のため残した商品 '+r.orphan+'件');
   };
   document.getElementById('chg').onclick=async()=>{
     const a=document.getElementById('cp1').value, b=document.getElementById('cp2').value;
