@@ -341,7 +341,7 @@ function vInput(m){
   h+=`<div class="card"><h3>廃棄した生乳量</h3>
     <div class="note" style="margin-top:0;margin-bottom:8px">広酪へも出荷できず、廃棄した生乳の量です。</div>
     <div class="row"><input type="number" id="waste" value="${e.wasteMilk??''}" placeholder="0"><span style="color:var(--sub)">L</span></div></div>`;
-  h+=`<div class="card"><h3>搾乳グループ頭数</h3>
+  h+=`<div class="card"><h3>搾乳した頭数</h3>
     <label>出荷可能頭数</label>
     <div class="row"><input type="number" id="cowsOk" value="${e.cowsOk??''}" placeholder="0"><span style="color:var(--sub)">頭</span></div>
     <label style="margin-top:10px">出荷不可頭数</label>
@@ -488,6 +488,7 @@ const RENAMES=[
   {from:{customer:'TLB（Log）'},               to:{customer:'LOG'}},
   {from:{customer:'道の駅１８２',item:'TG'},   to:{customer:'道の駅182ステーション',item:'TG'}},
   {from:{customer:'道の駅１８２',item:'牛乳'}, to:{customer:'道の駅182（カフェ）',item:'牛乳 900ml'}},
+  {from:{customer:'道の駅182ステーション',item:'牛乳'}, to:{customer:'道の駅182（カフェ）',item:'牛乳 900ml'}},
 ];
 function applyRenames(p){
   var q={id:p.id,customer:p.customer,item:p.item,price:p.price};
