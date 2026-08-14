@@ -483,6 +483,12 @@ function docLines(cust,month,byDate){
   return Object.values(map).map(x=>({...x,total:x.qty*x.price}));
 }
 
+function normKey(t){
+  return String(t==null?'':t)
+    .replace(/[\uFF10-\uFF19\uFF21-\uFF3A\uFF41-\uFF5A]/g,
+      function(c){ return String.fromCharCode(c.charCodeAt(0)-0xFEE0); })
+    .replace(/[\s\u3000]/g,'');
+}
 const RENAMES=[
   {from:{customer:'TLB'},                      to:{customer:'LOG'}},
   {from:{customer:'TLB（Log）'},               to:{customer:'LOG'}},
@@ -493,8 +499,8 @@ const RENAMES=[
 function applyRenames(p){
   var q={id:p.id,customer:p.customer,item:p.item,price:p.price};
   RENAMES.forEach(function(r){
-    var okC=(r.from.customer===undefined)||(q.customer===r.from.customer);
-    var okI=(r.from.item===undefined)||(q.item===r.from.item);
+    var okC=(r.from.customer===undefined)||(normKey(q.customer)===normKey(r.from.customer));
+    var okI=(r.from.item===undefined)||(normKey(q.item)===normKey(r.from.item));
     if(okC&&okI){
       if(r.to.customer!==undefined) q.customer=r.to.customer;
       if(r.to.item!==undefined)     q.item=r.to.item;
@@ -503,12 +509,12 @@ function applyRenames(p){
   return q;
 }
 function mergeProducts(current, preset){
-  var cur=(current||[]).map(function(p){var r=applyRenames(p);return {orig:p,key:r.customer+'|#|'+r.item,ren:r};});
+  var cur=(current||[]).map(function(p){var r=applyRenames(p);return {orig:p,key:normKey(r.customer)+'|#|'+normKey(r.item),ren:r};});
   var used={}, maxN=0;
   cur.forEach(function(c){var m=/^p(\d+)$/.exec(c.orig.id||''); if(m) maxN=Math.max(maxN,parseInt(m[1],10));});
   var out=[], kept=0, added=0;
   preset.forEach(function(p){
-    var key=p.customer+'|#|'+p.item;
+    var key=normKey(p.customer)+'|#|'+normKey(p.item);
     var hit=null;
     for(var i=0;i<cur.length;i++){ if(cur[i].key===key && !used[cur[i].orig.id]){ hit=cur[i]; break; } }
     if(hit){ used[hit.orig.id]=1; kept++; out.push({id:hit.orig.id,customer:p.customer,item:p.item,price:p.price}); }
