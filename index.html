@@ -540,6 +540,36 @@ function docLinesDay(cust,date){
   });
   return out;
 }
+// 帳票（納品書・請求書）の宛名だけを差し替える対応表。
+// 入力・集計・設定タブの表示名は変わりません。
+const BILL_NAMES={
+  'IKO'                  : ['有限会社I.K.O'],
+  'LOG'                  : ['TLB㈱（Log）'],
+  '【U2】ヤードカフェ'      : ['onomichi U2'],
+  '【U2】フードショップ'    : ['onomichi U2'],
+  '【U2】アイスクリーム事業部': ['onomichi U2 アイスラボ'],
+  'ガンツウ'              : ['ツネイシランド&シー株式会社'],
+  'やまと酵素'            : ['やまと酵素crest株式会社'],
+  '白バラ'                : ['株式会社白ばら'],
+  '白ばら'                : ['株式会社白ばら'],
+  '焼肉神石'              : ['株式会社MSERRNT','焼肉神石　西麻布店'],
+  '焼肉神石　西麻布'       : ['株式会社MSERRNT','焼肉神石　西麻布店'],
+  'Cambio Corsa'         : ['Studio Tange','Cambio Corsa'],
+  '神石高原温泉'          : ['神石高原温泉利用組合'],
+  '星のこカフェ'          : ['株式会社MSERRNT','星のこカフェ'],
+};
+function billLines(cust){
+  if(BILL_NAMES[cust]) return BILL_NAMES[cust];
+  const k=normKey(cust);
+  for(const key in BILL_NAMES){ if(normKey(key)===k) return BILL_NAMES[key]; }
+  return [cust];
+}
+function billHtml(cust){
+  const ls=billLines(cust);
+  return ls.map(function(t,i){
+    return (i===ls.length-1) ? (t+'　御中') : t;
+  }).join('<br>');
+}
 function taxRate(item){ return /送料|容器/.test(item) ? 0.10 : 0.08; }
 function pad2(n){ return String(n).padStart(2,'0'); }
 function nowLocal(){ const d=new Date();
@@ -600,7 +630,7 @@ function vDocs(m){
     </table></div>
     <div class="meta">
       <div class="to">
-        <div class="nm">${cust}　御中</div>
+        <div class="nm">${billHtml(cust)}</div>
         <div class="sbj">${isInv?`件名：${jpMonth(month)}分　乳製品代`:`${jpDate(day)}分として、下記のとおり納品いたしました。`}</div>
       </div>
       <div class="from">
