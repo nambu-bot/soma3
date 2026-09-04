@@ -596,7 +596,12 @@ function nowLocal(){ const d=new Date();
 function vDocs(m){
   const custs=[...new Set(S.products.map(p=>p.customer))];
   const cust=S._dc||custs[0]||'';
-  const month=S._dm||today().slice(0,7);
+  const custIdx=Math.max(0,custs.indexOf(cust));
+  const prevMonth=(function(){
+    const d=new Date(); d.setDate(1); d.setMonth(d.getMonth()-1);
+    return `${d.getFullYear()}-${pad2(d.getMonth()+1)}`;
+  })();
+  const month=S._dm||prevMonth;
   const kind=S._dk||'請求書';
   const isInv=kind==='請求書';
   const day=S._dd||today();
@@ -638,7 +643,13 @@ function vDocs(m){
       <span style="color:var(--sub);font-size:13px">通目　→　${docNo}</span>
     </div>
     <button class="btn" id="pr">PDFで保存 / 印刷</button>
-    <div class="note">印刷画面で「送信先」を「PDFに保存」にするとPDFになります。</div></div>`;
+    <div class="row" style="margin-top:10px">
+      <button class="btn sub" id="pv" style="flex:1">← 前の販売先</button>
+      <button class="btn sub" id="nx" style="flex:1">次の販売先 →</button>
+    </div>
+    <div class="note">${custIdx+1} / ${custs.length} 件目（${cust}）</div>
+    <div class="note" style="margin-top:4px">保存先の例：<br>
+      【${month.replace('-','')}分 （${pad2(((+month.slice(5,7))%12)+1)}初週送付）】</div></div>`;
 
   h+=`<div class="card"><div class="sheet">
     <div class="dtitle">${kind}</div><div class="drule"></div>
@@ -722,10 +733,21 @@ function vDocs(m){
     const v=Math.max(1,parseInt(e.target.value,10)||1);
     S._seq[seqKey]=v; LS.set(seqKey,v); render();
   };
+  const pvEl=document.getElementById('pv');
+  const nxEl=document.getElementById('nx');
+  if(pvEl) pvEl.onclick=()=>{ S._dc=custs[(custIdx-1+custs.length)%custs.length]; render(); };
+  if(nxEl) nxEl.onclick=()=>{ S._dc=custs[(custIdx+1)%custs.length]; render(); };
   document.getElementById('pr').onclick=()=>{
+    const label = isInv ? 'ご請求書' : '納品書';
+    const org = document.title;
+    document.title = '【'+label+'】株式会社相馬牧場_'+docNo;
     window.print();
+    document.title = org;
     S._seq[seqKey]=seq+1; LS.set(seqKey,seq+1);
-    setTimeout(render,600);
+    setTimeout(()=>{
+      if(custIdx < custs.length-1) S._dc=custs[custIdx+1];
+      render();
+    },800);
   };
 }
 
