@@ -56,50 +56,68 @@
   .right{text-align:right;} .center{text-align:center;}
 
   /* ── 帳票（納品書・請求書） ── */
-  .sheet{background:#fff;border:1px solid var(--line);border-radius:4px;padding:28px 26px;
-    font-family:'Yu Gothic','Hiragino Kaku Gothic ProN',sans-serif;color:#111;font-size:12px;}
-  .sheet .dtitle{text-align:center;font-size:24px;font-weight:700;letter-spacing:12px;margin:0 0 20px;}
-  .sheet .hdr{display:flex;justify-content:flex-end;margin-bottom:14px;}
-  .sheet .hdr table{border-collapse:collapse;font-size:11px;}
-  .sheet .hdr td{border:1px solid #999;padding:4px 10px;}
-  .sheet .hdr td.k{background:#f2f1ec;font-weight:700;text-align:right;white-space:nowrap;}
-  .sheet .hdr td.v{text-align:center;min-width:120px;}
-  .sheet .meta{display:flex;justify-content:space-between;gap:24px;margin-bottom:16px;}
+  .sheet{background:#fff;border:1px solid var(--line);border-radius:4px;padding:30px 28px;
+    font-family:'Yu Gothic','Hiragino Kaku Gothic ProN',sans-serif;color:#1A2721;font-size:12px;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .sheet *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .sheet .dtitle{text-align:center;font-size:25px;font-weight:700;letter-spacing:12px;
+    color:#2C5F4F;margin:0 0 6px;}
+  .sheet .drule{width:74px;height:3px;background:#2C5F4F;margin:0 auto 20px;border-radius:2px;}
+  .sheet .hdr{display:flex;justify-content:flex-end;margin-bottom:16px;}
+  .sheet .hdr table{border-collapse:separate;border-spacing:0;font-size:11px;
+    border:1px solid #C6D6CE;border-radius:4px;overflow:hidden;}
+  .sheet .hdr td{padding:5px 12px;border-bottom:1px solid #DCE7E2;}
+  .sheet .hdr tr:last-child td{border-bottom:none;}
+  .sheet .hdr td.k{background:#EAF1ED;font-weight:700;text-align:right;white-space:nowrap;
+    color:#2C5F4F;border-right:1px solid #DCE7E2;}
+  .sheet .hdr td.v{text-align:center;min-width:126px;}
+  .sheet .meta{display:flex;justify-content:space-between;gap:24px;margin-bottom:18px;}
   .sheet .to{flex:1;}
-  .sheet .to .nm{font-size:15px;font-weight:700;border-bottom:1px solid #111;padding-bottom:6px;}
-  .sheet .to .sbj{margin-top:14px;font-size:11px;}
-  .sheet .from{min-width:250px;font-size:11px;line-height:1.85;}
-  .sheet .from .co{font-size:14px;font-weight:700;}
-  .sheet .from{position:relative;}
+  .sheet .to .nm{font-size:15px;font-weight:700;border-bottom:2px solid #2C5F4F;padding-bottom:7px;}
+  .sheet .to .sbj{margin-top:14px;font-size:11px;color:#3F4F49;}
+  .sheet .from{min-width:250px;font-size:11px;line-height:1.85;position:relative;color:#3F4F49;}
+  .sheet .from .co{font-size:14px;font-weight:700;color:#1A2721;}
   .sheet .seal{position:absolute;right:4px;top:12px;width:58px;height:58px;opacity:.92;}
-  .sheet .grand{border:2px solid #111;display:flex;align-items:stretch;margin:12px 0 10px;}
+  .sheet .grand{display:flex;align-items:stretch;margin:14px 0 10px;
+    border:2px solid #2C5F4F;border-radius:5px;overflow:hidden;}
   .sheet .grand .lbl{flex:1;display:flex;align-items:center;justify-content:center;
-    font-size:14px;font-weight:700;padding:10px;border-right:2px solid #111;}
-  .sheet .grand .amt{width:46%;text-align:right;font-size:20px;font-weight:700;padding:10px 14px;}
-  .sheet .due{font-size:11px;margin-bottom:14px;display:flex;justify-content:space-between;}
-  .sheet table.items{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:12px;}
-  .sheet table.items th{background:#e8efec;border:1px solid #999;padding:6px 4px;font-weight:700;text-align:center;}
-  .sheet table.items td{border:1px solid #bbb;padding:6px 5px;}
+    font-size:14px;font-weight:700;padding:11px;background:#2C5F4F;color:#fff;letter-spacing:1px;}
+  .sheet .grand .amt{width:46%;text-align:right;font-size:21px;font-weight:700;
+    padding:11px 16px;color:#1A2721;}
+  .sheet .due{font-size:11px;margin-bottom:14px;display:flex;justify-content:space-between;color:#3F4F49;}
+  .sheet table.items{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:14px;}
+  .sheet table.items th{background:#2C5F4F;color:#fff;border:1px solid #2C5F4F;
+    padding:7px 4px;font-weight:700;text-align:center;}
+  .sheet table.items td{border:1px solid #D3E0DA;padding:7px 6px;}
+  .sheet table.items tbody tr:nth-child(even) td{background:#F6FAF8;}
   .sheet table.items td.n{text-align:right;}
   .sheet table.items td.c{text-align:center;}
   .sheet table.items tr.blank td{height:24px;}
-  .sheet table.sum{margin-left:auto;width:300px;border-collapse:collapse;font-size:11px;}
-  .sheet table.sum td{padding:5px 9px;border:1px solid #ccc;}
-  .sheet table.sum td.k{background:#f7f6f2;text-align:right;}
-  .sheet table.sum td.v{text-align:right;width:115px;}
-  .sheet table.sum tr.fin td{border-top:2px solid #111;font-size:14px;font-weight:700;background:#fff;}
-  .sheet .bank{margin-top:16px;border:1px solid #999;padding:10px 12px;font-size:11px;line-height:1.9;}
-  .sheet .memo{margin-top:12px;border:1px solid #999;padding:8px 12px;font-size:11px;min-height:44px;}
-  .sheet .memo b{font-size:11px;}
+  .sheet table.sum{margin-left:auto;width:304px;border-collapse:collapse;font-size:11px;}
+  .sheet table.sum td{padding:6px 10px;border:1px solid #D3E0DA;}
+  .sheet table.sum td.k{background:#EAF1ED;text-align:right;color:#2C5F4F;font-weight:600;}
+  .sheet table.sum td.v{text-align:right;width:118px;}
+  .sheet table.sum tr.fin td{border-top:2px solid #2C5F4F;font-size:14px;font-weight:700;}
+  .sheet table.sum tr.fin td.k{background:#2C5F4F;color:#fff;}
+  .sheet table.sum tr.fin td.v{background:#fff;color:#1A2721;}
+  .sheet .bank{margin-top:18px;border:1px solid #C6D6CE;border-left:4px solid #2C5F4F;
+    border-radius:4px;background:#F6FAF8;padding:11px 14px;font-size:11px;line-height:1.9;}
+  .sheet .bank b{font-size:11.5px;color:#2C5F4F;}
+  .sheet .memo{margin-top:12px;border:1px solid #C6D6CE;border-radius:4px;
+    padding:9px 14px;font-size:11px;min-height:44px;}
+  .sheet .memo b{font-size:11px;color:#2C5F4F;}
   .sheet table.sign{width:100%;border-collapse:collapse;font-size:11px;margin-top:6px;}
-  .sheet table.sign th{background:#e8efec;border:1px solid #999;padding:6px 4px;font-weight:700;text-align:center;}
-  .sheet table.sign td{border:1px solid #999;height:58px;vertical-align:middle;}
+  .sheet table.sign th{background:#EAF1ED;border:1px solid #C6D6CE;padding:7px 4px;
+    font-weight:700;text-align:center;color:#2C5F4F;}
+  .sheet table.sign td{border:1px solid #C6D6CE;height:58px;vertical-align:middle;}
   .sheet table.sign td.c{text-align:center;}
-  .sheet .signttl{font-size:11px;font-weight:700;margin-top:14px;}
-  .sheet .rem{margin-top:12px;font-size:10.5px;color:#444;border-top:1px dashed #bbb;padding-top:8px;line-height:1.7;}
+  .sheet .signttl{font-size:11px;font-weight:700;margin-top:14px;color:#2C5F4F;}
+  .sheet .rem{margin-top:14px;font-size:10.5px;color:#5A6B64;
+    border-top:1px solid #DCE7E2;padding-top:9px;line-height:1.7;}
 
   @media print{
-    body{background:#fff;}
+    body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
     .no-print{display:none !important;}
     .wrap{max-width:none;}
     main{padding:0;}
@@ -623,7 +641,7 @@ function vDocs(m){
     <div class="note">印刷画面で「送信先」を「PDFに保存」にするとPDFになります。</div></div>`;
 
   h+=`<div class="card"><div class="sheet">
-    <div class="dtitle">${kind}</div>
+    <div class="dtitle">${kind}</div><div class="drule"></div>
     <div class="hdr"><table>
       <tr><td class="k">発行日時</td><td class="v">${issueTxt}</td></tr>
       <tr><td class="k">${kind}番号</td><td class="v">${docNo}</td></tr>
