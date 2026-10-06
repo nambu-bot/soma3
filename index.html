@@ -849,11 +849,10 @@ function vSettings(m){
       const btn = act
         ? `<button class="btn sub" data-end="${p.id}" style="width:auto;flex:none;padding:6px 10px;font-size:12px">終了</button>`
         : `<button class="btn sub" data-re="${p.id}" style="width:auto;flex:none;padding:6px 10px;font-size:12px">再開</button>`;
-      const del = used[p.id] ? '' : `<button class="del" data-del="${p.id}" title="販売実績がないため削除できます">×</button>`;
       h+=`<div class="row" style="${act?'':'opacity:.55'}"><div style="flex:1;font-size:14px">${p.item}${act?'':'<span style="font-size:11px;color:var(--sub)">（終了）</span>'}</div>
         <input type="number" class="pz" data-id="${p.id}" value="${p.price}" style="width:100px;flex:none;text-align:right">
         <span style="font-size:12px;color:var(--sub)">円</span>
-        ${btn}${del}</div>`;
+        ${btn}</div>`;
     });
   }
   h+=`</div><div class="card"><h3>新しい商品を追加</h3>
@@ -870,11 +869,6 @@ function vSettings(m){
     <button class="btn sub" id="rl">最新の内容を読み込む</button></div>`;
   m.innerHTML=h;
   m.querySelectorAll('.pz').forEach(i=>i.onblur=()=>saveProducts(S.products.map(p=>p.id===i.dataset.id?{...p,price:Number(i.value)||0}:p)));
-  m.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
-    if(used[b.dataset.del]){ alert('販売実績がある商品は削除できません。「終了」を使ってください。'); return; }
-    if(!confirm('この商品を削除します。よろしいですか？')) return;
-    saveProducts(S.products.filter(p=>p.id!==b.dataset.del));
-  });
   m.querySelectorAll('[data-end]').forEach(b=>b.onclick=()=>{
     if(!confirm('この商品を終了します。入力画面から消えますが、過去の記録はそのまま残ります。')) return;
     saveProducts(S.products.map(p=>p.id===b.dataset.end?{...p,active:false}:p));
