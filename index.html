@@ -195,6 +195,12 @@ function yen(n){ return '¥'+Math.round(n||0).toLocaleString('ja-JP'); }
 function num(n){ return Math.round(n||0).toLocaleString('ja-JP'); }
 function uid(){ return Math.random().toString(36).slice(2,9); }
 function groupBy(ps){ const g={}; ps.forEach(p=>{(g[p.customer]=g[p.customer]||[]).push(p);}); return g; }
+// 記録時の単価（無い古い記録は商品マスタの単価）
+function priceOf(r,p){ return (r&&r.prices&&r.prices[p.id]!==undefined)?Number(r.prices[p.id]):p.price; }
+// 使用中の商品か（終了した商品は false）
+function isActive(p){ return p.active!==false; }
+// 1度でも販売実績のある商品ID
+function usedIds(){ const u={}; S.records.forEach(r=>{for(const k in (r.sales||{})) if(Number(r.sales[k])>0) u[k]=1;}); return u; }
 function jpDate(s){ if(!s) return ''; const [y,m,d]=s.split('-'); return `${y}年${+m}月${+d}日`; }
 function jpMonth(s){ const [y,m]=s.split('-'); return `${y}年${+m}月`; }
 
@@ -347,7 +353,7 @@ async function saveRecord(rec){
 }
 async function saveProducts(list){
   S.products=list; S.busy=true; render();
-  try{ await apiPost({action:'saveProducts',products:list}); }catch(e){}
+  try{ await apiPost({action:'saveProducts',products:list}); await reload(); }catch(e){}
   S.busy=false; render();
 }
 async function savePayment(key,status,paidDate){
@@ -380,7 +386,9 @@ function vInput(m){
   const date=S._d||today();
   const e=S.records.find(r=>r.date===date)||{};
   const sales=S._s||e.sales||{};
-  const custs=[...new Set(S.products.map(p=>p.customer))];
+  // 使用中の商品と、この日に数量が入っている商品だけを表示
+  const visible=S.products.filter(p=>isActive(p)||Number(sales[p.id])>0);
+  const custs=[...new Set(visible.map(p=>p.customer))];
   const filt=S._fc||'__all__';
 
   let h=`<div class="card"><h3>日付</h3><input type="date" id="d" value="${date}">${e.date?'<div style="font-size:12px;color:var(--accent);margin-top:6px">この日の記録を編集しています</div>':''}</div>`;
@@ -404,7 +412,7 @@ function vInput(m){
       ${custs.map(c=>`<option value="${c}" ${filt===c?'selected':''}>${c}</option>`).join('')}
     </select>`;
 
-  const g=groupBy(S.products);
+  const g=groupBy(visible);
   let shown=0;
   for(const c in g){
     let list=g[c];
@@ -412,18 +420,19 @@ function vInput(m){
     if(filt==='__entered__') list=list.filter(p=>Number(sales[p.id])>0);
     if(!list.length) continue;
     shown++;
-    const csub=list.reduce((s2,p)=>s2+(Number(sales[p.id])||0)*p.price,0);
+    const csub=list.reduce((s2,p)=>s2+(Number(sales[p.id])||0)*priceOf(e,p),0);
     h+=`<p class="cust">${c}${csub?`<span style="float:right;font-weight:700">${yen(csub)}</span>`:''}</p>`;
     list.forEach(p=>{
       const q=sales[p.id]??'';
-      h+=`<div class="row"><div style="flex:1;font-size:14px">${p.item}<span style="color:var(--sub);font-size:12px">　${yen(p.price)}/点</span></div>
+      const up=priceOf(e,p);
+      h+=`<div class="row"><div style="flex:1;font-size:14px">${p.item}${isActive(p)?'':'<span style="color:var(--sub);font-size:11px">（終了）</span>'}<span style="color:var(--sub);font-size:12px">　${yen(up)}/点</span></div>
       <input type="number" class="q" data-id="${p.id}" value="${q}" placeholder="0" style="width:84px;flex:none;text-align:right">
-      <div class="money" data-mn="${p.id}">${yen((Number(q)||0)*p.price)}</div></div>`;
+      <div class="money" data-mn="${p.id}">${yen((Number(q)||0)*up)}</div></div>`;
     });
   }
   if(!shown) h+=`<div style="color:var(--sub);font-size:13px;padding:10px 0">表示できる商品がありません。</div>`;
 
-  const t=S.products.reduce((s2,p)=>s2+(Number(sales[p.id])||0)*p.price,0);
+  const t=S.products.reduce((s2,p)=>s2+(Number(sales[p.id])||0)*priceOf(e,p),0);
   h+=`<div class="tot"><span>この日の売上合計（全社）</span><span id="dt" style="color:var(--accent)">${yen(t)}</span></div></div>`;
   h+=`<button class="btn" id="sv">この日の記録を保存</button>`;
   m.innerHTML=h;
@@ -433,11 +442,19 @@ function vInput(m){
   m.querySelectorAll('.q').forEach(i=>i.oninput=()=>{
     const s2=Object.assign({},S._s||e.sales||{}); s2[i.dataset.id]=i.value; S._s=s2;
     const p=S.products.find(x=>x.id===i.dataset.id);
-    m.querySelector(`[data-mn="${i.dataset.id}"]`).textContent=yen((Number(i.value)||0)*p.price);
-    document.getElementById('dt').textContent=yen(S.products.reduce((a,pp)=>a+(Number(s2[pp.id])||0)*pp.price,0));
+    m.querySelector(`[data-mn="${i.dataset.id}"]`).textContent=yen((Number(i.value)||0)*priceOf(e,p));
+    document.getElementById('dt').textContent=yen(S.products.reduce((a,pp)=>a+(Number(s2[pp.id])||0)*priceOf(e,pp),0));
   });
   document.getElementById('sv').onclick=()=>{
-    saveRecord({date,
+    // 記録時の単価を一緒に保存（既に記録済みの単価は変えない）
+    const sv=S._s||e.sales||{}, prices={};
+    Object.keys(sv).forEach(id=>{
+      if(!(Number(sv[id])>0)) return;
+      const old=e.prices&&e.prices[id];
+      const pp=S.products.find(x=>x.id===id);
+      prices[id]= old!==undefined ? Number(old) : (pp?pp.price:0);
+    });
+    saveRecord({date,prices,
       milk:Number(document.getElementById('milk').value)||0,
       shipGyoraku:Number(document.getElementById('ship').value)||0,
       wasteMilk:Number(document.getElementById('waste').value)||0,
@@ -464,7 +481,8 @@ function vReport(m){
   const okShow=S.period==='day'?okSum:(daysWithCows>0?okSum/daysWithCows:0);
   const map={};
   f.forEach(r=>S.products.forEach(p=>{const q=Number(r.sales?.[p.id])||0;if(!q)return;
-    if(!map[p.id])map[p.id]={customer:p.customer,item:p.item,price:p.price,qty:0};map[p.id].qty+=q;}));
+    const pr=priceOf(r,p), k=p.id+'@'+pr;
+    if(!map[k])map[k]={customer:p.customer,item:p.item,price:pr,qty:0};map[k].qty+=q;}));
   const rows=Object.values(map).map(x=>({...x,total:x.qty*x.price})).sort((a,b)=>b.total-a.total);
   const grand=rows.reduce((s,x)=>s+x.total,0);
   const it=S.period==='day'?'date':S.period==='month'?'month':'number';
@@ -522,12 +540,13 @@ function docLines(cust,month,byDate){
   if(byDate){
     const out=[];
     recs.forEach(r=>mine.forEach(p=>{const q=Number(r.sales?.[p.id])||0;if(!q)return;
-      out.push({date:r.date,item:p.item,qty:q,price:p.price,total:q*p.price});}));
+      const pr=priceOf(r,p); out.push({date:r.date,item:p.item,qty:q,price:pr,total:q*pr});}));
     return out;
   }
   const map={};
   recs.forEach(r=>mine.forEach(p=>{const q=Number(r.sales?.[p.id])||0;if(!q)return;
-    if(!map[p.id])map[p.id]={item:p.item,price:p.price,qty:0};map[p.id].qty+=q;}));
+    const pr=priceOf(r,p), k=p.id+'@'+pr;
+    if(!map[k])map[k]={item:p.item,price:pr,qty:0};map[k].qty+=q;}));
   return Object.values(map).map(x=>({...x,total:x.qty*x.price}));
 }
 
@@ -582,7 +601,8 @@ function docLinesDay(cust,date){
   const out=[];
   S.products.filter(p=>p.customer===cust).forEach(p=>{
     const q=Number(r.sales?.[p.id])||0;
-    if(q) out.push({date:r.date,item:p.item,qty:q,price:p.price,total:q*p.price});
+    const pr=priceOf(r,p);
+    if(q) out.push({date:r.date,item:p.item,qty:q,price:pr,total:q*pr});
   });
   return out;
 }
@@ -812,16 +832,28 @@ function vPay(m){
 }
 
 function vSettings(m){
-  const g=groupBy(S.products);
+  const used=usedIds();
+  const showEnded=!!S._showEnded;
+  const list=S.products.filter(p=>showEnded||isActive(p));
+  const endedN=S.products.filter(p=>!isActive(p)).length;
+  const g=groupBy(list);
   let h=`<div class="card"><h3>販売先・商品ごとの単価</h3>
-    <div class="note" style="margin-top:0;margin-bottom:12px">ここで登録した単価で金額を自動計算します。</div>`;
+    <div class="note" style="margin-top:0;margin-bottom:8px">単価を変えると、<b>これから入力する分</b>に新しい単価が使われます。<b>過去の記録の金額は変わりません。</b></div>
+    <div class="note" style="margin-top:0;margin-bottom:12px">使わなくなった商品は「終了」を押してください。入力画面から消えますが、過去の記録と請求書はそのまま残ります。</div>
+    <label style="display:flex;align-items:center;gap:6px;font-size:13px;margin-bottom:10px;cursor:pointer">
+      <input type="checkbox" id="se" ${showEnded?'checked':''} style="width:auto;margin:0">終了した商品も表示（${endedN}件）</label>`;
   for(const c in g){
     h+=`<p class="cust">${c}</p>`;
     g[c].forEach(p=>{
-      h+=`<div class="row"><div style="flex:1;font-size:14px">${p.item}</div>
+      const act=isActive(p);
+      const btn = act
+        ? `<button class="btn sub" data-end="${p.id}" style="width:auto;flex:none;padding:6px 10px;font-size:12px">終了</button>`
+        : `<button class="btn sub" data-re="${p.id}" style="width:auto;flex:none;padding:6px 10px;font-size:12px">再開</button>`;
+      const del = used[p.id] ? '' : `<button class="del" data-del="${p.id}" title="販売実績がないため削除できます">×</button>`;
+      h+=`<div class="row" style="${act?'':'opacity:.55'}"><div style="flex:1;font-size:14px">${p.item}${act?'':'<span style="font-size:11px;color:var(--sub)">（終了）</span>'}</div>
         <input type="number" class="pz" data-id="${p.id}" value="${p.price}" style="width:100px;flex:none;text-align:right">
         <span style="font-size:12px;color:var(--sub)">円</span>
-        <button class="del" data-del="${p.id}">×</button></div>`;
+        ${btn}${del}</div>`;
     });
   }
   h+=`</div><div class="card"><h3>新しい商品を追加</h3>
@@ -829,9 +861,6 @@ function vSettings(m){
     <label>商品名</label><input id="ni" placeholder="例：牛乳" style="margin-bottom:8px">
     <label>単価（円／点）</label><input id="np" type="number" placeholder="例：270" style="margin-bottom:12px">
     <button class="btn" id="add">追加する</button></div>`;
-  h+=`<div class="card"><h3>商品マスタの更新</h3>
-    <div class="note" style="margin-top:0;margin-bottom:12px">最新の単価一覧（17取引先・66商品）に更新します。<b>入力済みの販売実績はそのまま残ります。</b></div>
-    <button class="btn sub" id="imp">商品マスタを更新する</button></div>`;
   h+=`<div class="card"><h3>パスワードの変更</h3>
     <label>新しいパスワード（6文字以上）</label><input id="cp1" type="password" style="margin-bottom:8px">
     <label>もう一度入力</label><input id="cp2" type="password" style="margin-bottom:12px">
@@ -841,19 +870,23 @@ function vSettings(m){
     <button class="btn sub" id="rl">最新の内容を読み込む</button></div>`;
   m.innerHTML=h;
   m.querySelectorAll('.pz').forEach(i=>i.onblur=()=>saveProducts(S.products.map(p=>p.id===i.dataset.id?{...p,price:Number(i.value)||0}:p)));
-  m.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>saveProducts(S.products.filter(p=>p.id!==b.dataset.del)));
+  m.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
+    if(used[b.dataset.del]){ alert('販売実績がある商品は削除できません。「終了」を使ってください。'); return; }
+    if(!confirm('この商品を削除します。よろしいですか？')) return;
+    saveProducts(S.products.filter(p=>p.id!==b.dataset.del));
+  });
+  m.querySelectorAll('[data-end]').forEach(b=>b.onclick=()=>{
+    if(!confirm('この商品を終了します。入力画面から消えますが、過去の記録はそのまま残ります。')) return;
+    saveProducts(S.products.map(p=>p.id===b.dataset.end?{...p,active:false}:p));
+  });
+  m.querySelectorAll('[data-re]').forEach(b=>b.onclick=()=>saveProducts(S.products.map(p=>p.id===b.dataset.re?{...p,active:true}:p)));
+  document.getElementById('se').onchange=ev=>{S._showEnded=ev.target.checked;render();};
   document.getElementById('add').onclick=()=>{
     const c=document.getElementById('nc').value,i=document.getElementById('ni').value,p=document.getElementById('np').value;
     if(!c||!i||!p) return;
-    saveProducts([...S.products,{id:uid(),customer:c.trim(),item:i.trim(),price:Number(p)||0}]);
+    saveProducts([...S.products,{id:uid(),customer:c.trim(),item:i.trim(),price:Number(p)||0,active:true}]);
   };
   document.getElementById('rl').onclick=async()=>{ await reload(); render(); alert('読み込みました'); };
-  document.getElementById('imp').onclick=async()=>{
-    if(!confirm('商品マスタを最新の内容に更新します。入力済みの販売実績はそのまま残ります。よろしいですか？')) return;
-    const r=mergeProducts(S.products, PRESET_PRODUCTS);
-    await saveProducts(r.list);
-    alert('更新しました。 引き継ぎ '+r.kept+'件 ／ 新規追加 '+r.added+'件 ／ 実績保持のため残した商品 '+r.orphan+'件');
-  };
   document.getElementById('chg').onclick=async()=>{
     const a=document.getElementById('cp1').value, b=document.getElementById('cp2').value;
     if(a.length<6){ alert('パスワードは6文字以上にしてください。'); return; }
