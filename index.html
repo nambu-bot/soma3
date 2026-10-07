@@ -624,7 +624,11 @@ const BILL_NAMES={
   '神石高原温泉'          : ['神石高原温泉利用組合'],
   '星のこカフェ'          : ['株式会社MSERRNT','星のこカフェ'],
   'ふるさと納税の返礼品(個人)' : ['特定非営利活動法人ピースウィンズ・ジャパン'],
+  '【わんこ】ふるさと納税の返礼品(個人)' : ['特定非営利活動法人ピースウィンズ・ジャパン','（ワンコ）ふるさと納税返礼品'],
+  '【ARROWS】ふるさと納税の返礼品(個人)' : ['特定非営利活動法人ピースウィンズ・ジャパン','（ARROWS）ふるさと納税返礼品'],
   'ふるさと納税の返礼品（個人）' : ['特定非営利活動法人ピースウィンズ・ジャパン'],
+  '【わんこ】ふるさと納税の返礼品（個人）' : ['特定非営利活動法人ピースウィンズ・ジャパン','（ワンコ）ふるさと納税返礼品'],
+  '【ARROWS】ふるさと納税の返礼品（個人）' : ['特定非営利活動法人ピースウィンズ・ジャパン','（ARROWS）ふるさと納税返礼品'],
 };
 function billLines(cust){
   if(BILL_NAMES[cust]) return BILL_NAMES[cust];
@@ -704,7 +708,7 @@ function vDocs(m){
   h+=`<div class="card"><div class="sheet">
     <div class="dtitle">${kind}</div><div class="drule"></div>
     <div class="hdr"><table>
-      <tr><td class="k">発行日時</td><td class="v">${issueTxt}</td></tr>
+      <tr><td class="k">発行日</td><td class="v">${issueTxt}</td></tr>
       <tr><td class="k">${kind}番号</td><td class="v">${docNo}</td></tr>
     </table></div>
     <div class="meta">
